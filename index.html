@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>台灣十六張麻將</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#17704f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="十六張麻將">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
@@ -93,6 +100,71 @@ h1,h2,h3{font-family:var(--serif);font-weight:900;line-height:1.05;margin:0;text
 .chip:disabled{cursor:default;opacity:.85}
 .panel .foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .small{font-size:14px;color:var(--muted);margin:0}
+
+/* ---------- 大廳：俯視牌桌、座位準備燈、深色設定 ---------- */
+.lobby2{min-height:100%;min-height:100dvh;background:radial-gradient(120% 90% at 50% 30%,var(--felt-hi),var(--felt) 55%,var(--felt-lo));
+  padding:calc(12px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));display:grid;gap:12px;
+  grid-template-columns:minmax(0,500px);justify-content:center;align-content:start;grid-template-areas:"top" "room" "msg" "tb" "set" "foot"}
+.ltop{grid-area:top;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ltop h1{font-size:clamp(21px,5.6vw,28px)}
+.lic{display:flex;gap:6px}.lic .ib{width:42px;height:42px}
+.lroom{grid-area:room;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-radius:99px;background:rgba(0,0,0,.3);box-shadow:inset 0 0 0 1.5px rgba(255,213,74,.5)}
+.lroom span{font-size:13px;color:var(--on-dim)}
+.lroom b{font:900 24px/1 var(--serif);color:#ffd54a;letter-spacing:.06em}
+.cpb{border:0;background:none;font-size:12px;padding:4px 9px;border-radius:99px;box-shadow:inset 0 0 0 1px rgba(246,241,226,.4);color:var(--on)}
+.btn.gold{margin-left:auto;background:#ffd54a;color:#2a1406;box-shadow:0 3px 0 #c79a1e;border-radius:99px}
+.lroom0{grid-area:room;justify-self:center}
+.lmsg{grid-area:msg;display:grid;gap:8px}.lmsg:empty{display:none}
+.ltb{grid-area:tb;position:relative;width:min(100%,420px);aspect-ratio:1;justify-self:center}
+.lfelt{position:absolute;inset:12%;border-radius:30px;background:radial-gradient(110% 90% at 50% 35%,#1f8a5f,#136247 70%);
+  box-shadow:0 0 0 12px #6b4123,0 0 0 14px #3a2210,inset 0 4px 16px rgba(0,0,0,.35),0 10px 24px rgba(0,0,0,.4)}
+.ldial{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(76px,22%,92px);aspect-ratio:1;border-radius:18px;background:linear-gradient(#3a2414,#1f130a);
+  display:grid;place-items:center;align-content:center;gap:2px;box-shadow:inset 0 0 0 1.5px rgba(255,213,74,.35),0 4px 10px rgba(0,0,0,.4);text-align:center}
+.ldial small{font-size:11px;color:var(--on-dim);line-height:1.2}.ldial b{font:900 24px/1 var(--serif);color:#ffd54a}
+.lseat{position:absolute;width:clamp(92px,27%,116px);display:grid;justify-items:center;gap:3px;padding:8px 6px 7px;border-radius:16px;background:rgba(20,12,6,.84);
+  box-shadow:inset 0 0 0 1.5px rgba(255,213,74,.3),0 6px 14px rgba(0,0,0,.4);text-align:center}
+.lseat.q0{left:50%;bottom:0;transform:translateX(-50%)}.lseat.q2{left:50%;top:0;transform:translateX(-50%)}
+.lseat.q3{left:0;top:50%;transform:translateY(-50%)}.lseat.q1{right:0;top:50%;transform:translateY(-50%)}
+.lseat.me{box-shadow:inset 0 0 0 2px #ffd54a,0 0 16px rgba(255,213,74,.5)}
+.lav{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:900 20px/1 var(--serif);background:#fbf7ec;color:#1d1a14;box-shadow:0 0 0 2px rgba(255,255,255,.45)}
+.lseat.bot .lav{background:#cfd6db;color:#3b4650}
+.lseat.empty .lav{background:transparent;color:rgba(246,241,226,.6);box-shadow:none;border:2px dashed rgba(246,241,226,.5)}
+.lseat.me .lav{box-shadow:0 0 0 2px #ffd54a}
+.ln{font-size:14px;line-height:1.25;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lseat.empty .ln{color:var(--on-dim);font-weight:500}
+.lst{font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:99px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.lst.ok{color:#7fe0a6;background:rgba(127,224,166,.13)}.lst.wt{color:#ffc46b;background:rgba(255,196,107,.13)}.lst.bt{color:#cfd6db;background:rgba(255,255,255,.1)}.lst.hs{color:#ffd54a;background:rgba(255,213,74,.13)}
+.sbs{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.sb{border:0;background:none;font-size:11.5px;font-weight:700;padding:4px 6px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(246,241,226,.45);color:var(--on);white-space:nowrap;min-height:28px}
+.sb:hover{background:rgba(255,255,255,.08)}
+.lx{position:absolute;top:-8px;right:-8px;width:28px;height:28px;padding:0;border-radius:50%;border:0;background:#3a2414;color:var(--on);font-size:18px;line-height:1;display:grid;place-items:center;box-shadow:0 0 0 1.5px rgba(255,213,74,.45)}
+.lset{grid-area:set;border-radius:16px;padding:12px 14px;display:grid;gap:9px;background:linear-gradient(180deg,#3a2414,#24160b);box-shadow:inset 0 0 0 1px rgba(255,213,74,.35),0 10px 24px rgba(0,0,0,.4)}
+.lsh{display:flex;align-items:baseline;gap:8px}.lsh b{font:900 18px var(--serif)}.lsh small{font-size:12px;color:var(--on-dim)}
+.lo{display:flex;align-items:center;gap:6px}
+.lb{width:4.4em;flex:none;font-size:13px;color:var(--on-dim);white-space:nowrap}
+.c2{flex:1;min-height:36px;padding:0 2px;border-radius:99px;border:0;background:transparent;font:500 14px var(--sans);color:var(--on);box-shadow:inset 0 0 0 1.5px rgba(246,241,226,.28);white-space:nowrap}
+.c2[aria-pressed=true]{background:#ffd54a;color:#2a1406;font-weight:700;box-shadow:0 2px 0 #c79a1e}
+.c2:disabled{cursor:default}.c2:disabled:not([aria-pressed=true]){opacity:.6}
+.lsm{margin:0;font-size:12px;color:var(--on-dim)}
+.lft{grid-area:foot;display:grid;gap:6px}
+.lsub{margin:0;font-size:13px;color:var(--on-dim);text-align:center}
+.lbt{display:flex;gap:8px;align-items:center}.lbt .go{flex:1}
+.go.hot{animation:gopulse 1.4s ease-in-out infinite}
+@keyframes gopulse{0%,100%{box-shadow:0 3px 0 var(--red-lo),0 0 0 0 rgba(255,213,74,0)}50%{box-shadow:0 3px 0 var(--red-lo),0 0 0 6px rgba(255,213,74,.5)}}
+.lwait{flex:1;text-align:center;color:var(--on-dim);font-size:14px}
+.cbet{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (min-width:900px),(orientation:landscape) and (max-height:520px){
+  .lobby2{grid-template-columns:auto minmax(0,460px);grid-template-areas:"tb top" "tb room" "tb msg" "tb set" "tb foot";column-gap:22px;align-items:start;align-content:center}
+  .ltb{width:min(440px,calc(100dvh - 40px));align-self:center}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .lobby2{padding:8px 14px calc(8px + env(safe-area-inset-bottom));gap:8px;min-height:100dvh;align-content:center}
+  .ltb{width:min(400px,calc(100dvh - 20px),46vw)}
+  .ltop h1{font-size:19px}.lic .ib{width:38px;height:38px}
+  .lroom{padding:4px 4px 4px 12px}.lroom b{font-size:20px}.lroom .btn{min-height:34px}
+  .lset{padding:9px 12px;gap:6px}.c2{min-height:32px;font-size:13px}.lsm{display:none}
+  .lsub{font-size:12px}.lbt .btn{min-height:40px}
+}
 
 /* ---------- buttons ---------- */
 .btn{min-height:46px;padding:0 20px;border-radius:12px;border:0;font-weight:700;font-size:17px;background:#fbf7ec;color:#1d1a14;
@@ -453,6 +525,96 @@ table.pay{width:100%;border-collapse:collapse;font-size:15px}
   .res .foot{position:sticky;bottom:-12px;margin:0 -16px -12px;padding:8px 16px 10px;background:linear-gradient(rgba(36,22,11,0),#24160b 35%)}
 }
 
+/* ---------- 安裝到桌面教學 ---------- */
+.inst{display:grid;gap:12px}
+.ihero{display:flex;align-items:center;gap:14px}.ihero img{border-radius:14px;flex:none;box-shadow:0 4px 10px rgba(0,0,0,.25)}.ihero p{margin:0;font-size:15px}
+.isteps{margin:0;padding:0;list-style:none;counter-reset:st;display:grid;gap:8px}
+.isteps li{counter-increment:st;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--line);font-size:15px;line-height:1.7}.isteps li>span{flex:1}
+.isteps li::before{content:counter(st);flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#ffd54a;color:#2a1406;font:900 15px var(--serif)}
+.ki{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);vertical-align:middle;color:var(--ink);fill:currentColor}
+.ki svg[fill=none]{fill:none}
+.ibig{width:100%;min-height:52px;font-size:18px}
+.inapp{display:grid;gap:8px;padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1.5px #e8c55a;background:rgba(255,213,74,.12)}.inapp p{margin:0}
+.inst-ok{font-size:16px}
+.pbar{gap:clamp(2px,1.6vw,14px)}.cbtn{width:64px}
+
+/* ---------- 個人資料：最近 10 局 ---------- */
+.dexh .pos,.dexh .neg{font-weight:900}
+.r7{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.r7 li{display:grid;grid-template-columns:auto 3.6em minmax(0,1fr) auto;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;font-size:14px}
+.r7 li:nth-child(odd){background:var(--line)}
+.r7 li.ex{cursor:pointer}.r7 li.ex:hover{box-shadow:inset 0 0 0 1.5px #e8c55a}
+.r7 li.op{background:rgba(255,213,74,.2);box-shadow:inset 0 0 0 1.5px #e8c55a}
+.tm7{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:3.2em}
+.tg7{text-align:center;padding:2px 0;border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
+.tg7.zm{background:linear-gradient(#ffe9a8,#f3c94a);color:#3a2408}.tg7.hu{background:#d7f2e2;color:#1d7a56}.tg7.fq{background:var(--red);color:#fff}
+.tg7.bz{background:#fbe0dc;color:#a1302a}.tg7.lj,.tg7.ns{background:var(--line);color:var(--muted);box-shadow:inset 0 0 0 1px rgba(128,128,128,.25)}
+.d7{min-width:0;overflow-wrap:anywhere}
+.bt7{font-style:normal;font-size:11px;color:var(--muted);padding:0 5px;border-radius:6px;box-shadow:inset 0 0 0 1px var(--muted);margin-left:5px;white-space:nowrap}
+.s7{font:900 16px var(--serif);text-align:right;min-width:3.2em;color:var(--muted)}.s7.p{color:#1d7a56}.s7.n{color:var(--red)}
+.ex7{grid-column:1/-1;display:grid;gap:4px;padding:4px 0 2px}.ex7[hidden]{display:none}.ex7 small{font-size:12px;color:var(--muted)}
+.h7{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap}.g7{display:flex;gap:1px}.h7 .t{--w:17px}
+@media (max-width:420px){.r7 li{grid-template-columns:3.6em minmax(0,1fr) auto;row-gap:2px}.r7 .tm7{grid-column:1/-1}}
+
+/* ---------- 規則頁：牌型圖解 ---------- */
+.rules2{width:min(920px,100%);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;border-radius:18px;color:var(--on);
+  background:linear-gradient(180deg,#3a2414,#24160b);box-shadow:inset 0 0 0 1px rgba(255,213,74,.35),0 20px 60px rgba(0,0,0,.55);overflow:hidden}
+.rhd{padding:14px 18px 10px;display:grid;gap:8px;border-bottom:1px solid rgba(255,213,74,.18)}
+.rtt{display:flex;align-items:center;justify-content:space-between}.rtt h2{font-size:22px}
+.rules2 .xb{color:var(--on)}.rules2 .xb:hover{background:rgba(255,255,255,.1)}
+.rtabs{display:flex;gap:6px;flex-wrap:wrap}
+.rtab{border:0;padding:6px 14px;border-radius:99px;font:700 14px var(--sans);color:var(--on);background:transparent;box-shadow:inset 0 0 0 1.5px rgba(246,241,226,.3)}
+.rtab.on{background:#ffd54a;color:#2a1406;box-shadow:0 2px 0 #c79a1e}
+.rbody{overflow:auto;padding:12px 18px 18px;display:grid;gap:12px;align-content:start;overscroll-behavior:contain}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr));gap:10px}
+.rp{border-radius:14px;padding:10px 12px 8px;background:rgba(0,0,0,.28);display:grid;gap:4px;align-content:start}
+.rph{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rph b{font:900 19px var(--serif)}
+.rph em{font-style:normal;padding:1px 9px;border-radius:99px;background:#ffd54a;color:#2a1406;font:900 13px/1.5 var(--serif)}
+.rkl{margin-left:auto;font-size:12px;color:#ffd54a;display:flex;align-items:center;gap:5px}.rkl i{width:16px;height:3px;border-radius:2px;background:#ffd54a}
+.rp p{margin:0;font-size:13px;color:var(--on-dim);line-height:1.45}
+.rtiles{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;margin-top:4px}
+.rg{display:grid;justify-items:center;gap:2px}
+.rgt{display:flex;gap:1px;padding-bottom:5px;border-bottom:3px solid transparent}
+.rg.k .rgt{border-bottom-color:#ffd54a}
+.rg small{font-size:11px;color:var(--on-dim)}
+.rtiles .t{--w:18px}
+.rules2 h3{font-size:17px;margin:4px 0 0}
+.rtm{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:6px}
+.rtm div{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:baseline;padding:6px 10px;border-radius:10px;background:rgba(0,0,0,.22);font-size:13px}
+.rtm b{font:900 15px var(--serif)}.rtm em{font-style:normal;color:#ffd54a;font-weight:700;white-space:nowrap}.rtm span{color:var(--on-dim)}
+.rtai{width:100%;border-collapse:collapse;font-size:14px}
+.rtai td{padding:5px 4px;border-bottom:1px dashed rgba(246,241,226,.18)}.rtai td.n{text-align:right;white-space:nowrap;color:#ffd54a;font-weight:700}
+.rul{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:15px;line-height:1.55}
+.rex{border-radius:14px;padding:10px 14px;background:rgba(0,0,0,.28);font-size:14px}.rex p{margin:4px 0 0;color:var(--on-dim)}.rex em{font-style:normal;color:#ffd54a;font-weight:900}
+.rsm{margin:0;font-size:12.5px;color:var(--on-dim)}
+@media (orientation:landscape) and (max-height:520px){.rhd{padding:8px 14px 6px;gap:5px}.rtt h2{font-size:18px}.rtab{padding:4px 12px;font-size:13px}.rbody{padding:8px 14px 12px}}
+
+/* ---------- 動畫圖層：擲骰發牌、出牌、算分；音效提示與開關 ---------- */
+#anim{position:fixed;inset:0;pointer-events:none;z-index:14;overflow:hidden}
+#anim>div{position:absolute;inset:0}
+#anim .flybox{inset:auto;width:auto;height:auto;transform-origin:50% 67%;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+.dealing #r-hand .t,.dealing .opp .backs,.dealing .opp .ml,.dealing #r-mtop .ml{opacity:0}
+.dealing #r-hand{pointer-events:none}
+.dealing .lastlog{opacity:0}
+.die{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:7px;background:linear-gradient(150deg,#fff,#e9ecea);box-shadow:0 3px 0 #c9cfcd,0 6px 10px rgba(0,0,0,.45)}
+.die svg{width:100%;height:100%;display:block}
+.dlab{position:absolute;transform:translateX(-50%);white-space:nowrap;font:700 14px var(--sans);color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6);opacity:0;transition:opacity .15s}
+.dlab.on{opacity:1}.dlab b{font:900 19px var(--serif);color:#ffd54a}
+.dgrp{position:absolute;display:flex;gap:1px;transform:translate(-50%,-50%)}
+.dgrp i{width:9px;height:12px;border-radius:2px;background:linear-gradient(160deg,#62c4ee,#2389c4);box-shadow:0 1px 0 #186a99,0 2px 3px rgba(0,0,0,.3)}
+.dgrp.v{flex-direction:column}.dgrp.v i{width:12px;height:9px}
+.coin{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c4,#ffd54a 45%,#c99700);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.sfloat{position:absolute;left:0;top:0;font:900 30px/1 var(--serif);white-space:nowrap;text-shadow:0 2px 0 rgba(0,0,0,.5),0 0 12px rgba(0,0,0,.4)}
+.sfloat.p{color:#ffd54a}.sfloat.n{color:#ff8a7e}
+.who .sc.up{color:#ffd54a;font-weight:900}
+.fxov.s3{background:transparent;align-items:end;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.fxov.s3 .fxskip{padding:4px 12px;border-radius:99px;background:rgba(0,0,0,.45)}
+#sndpill{position:fixed;left:50%;top:28%;transform:translateX(-50%);z-index:18;pointer-events:none;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:99px;
+  background:rgba(18,12,6,.86);color:#f6f1e2;font:700 15px var(--sans);box-shadow:0 8px 22px rgba(0,0,0,.45),inset 0 0 0 1.5px rgba(255,213,74,.6);animation:fxup .3s both}
+#sndpill i{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#ffd54a}
+.sndt{margin-left:auto;margin-right:4px;display:flex;align-items:center;gap:6px;min-height:40px;padding:0 12px 0 10px;border:0;border-radius:12px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line);font:700 14px var(--sans)}
+.sndt small{font-weight:500;font-size:12px;margin-left:4px;opacity:.75}
+.sndt.on{background:#ffd54a;color:#2a1406;box-shadow:0 2px 0 #c79a1e}
 @media (prefers-reduced-motion:reduce){.splash-t{animation:none}.stkb{animation:fxfade 3.2s forwards}.t.fresh{animation:none}.hand .t{transition:none}.timer i{transition:none}.burst .rays,.fxov .burst,.stamp,.fxwho,.fxhand,.fxgroups,.fxdesc{animation:none}.fx{animation:fxfade 1.1s forwards}}
 @keyframes fxfade{0%,80%{opacity:1}100%{opacity:0}}
 </style>
@@ -463,6 +625,7 @@ table.pay{width:100%;border-collapse:collapse;font-size:15px}
 <div id="fx" aria-live="polite"></div>
 <div id="stk" aria-live="polite"></div>
 <div id="stkq"></div>
+<div id="anim" aria-hidden="true"></div>
 <script>window.mjBackend = new Promise(function (r) { window.__mjResolve = r; });</script>
 <script type="module">
 /* Firebase 轉接層：帳號登入（帳號＋密碼，可選填 Email 找回密碼）、房號、資料庫與在線偵測。
@@ -527,14 +690,14 @@ const V = {
     ${field('id', '帳號或 Email', 'autocomplete="username" autocapitalize="none" spellcheck="false" required', '<b>註冊時有填 Email 的人，這裡只能輸入 Email</b>，輸入帳號會登入失敗')}
     ${field('pw', '密碼', 'type="password" autocomplete="current-password" required')}
     ${note(err, msg)}<button class="btn red" type="submit">登入</button>
-    <div class="glinks"><button type="button" class="lnk" data-go="forgot">忘記密碼</button></div>${pbar([['local', '單機練習']])}</form>`),
+    <div class="glinks"><button type="button" class="lnk" data-go="forgot">忘記密碼</button></div>${pbar([['local', '單機練習'], ['install', '安裝到桌面']])}</form>`),
   register: err => showGate(`<form class="panel gp" data-f="register" novalidate>${tabs('register')}
     ${field('user', '帳號', 'autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="16" required', '英文小寫、數字或底線，3–16 個字，登入時用')}
     ${field('pw', '密碼', 'type="password" autocomplete="new-password" required', '至少 6 個字')}
     ${field('pw2', '再輸入一次密碼', 'type="password" autocomplete="new-password" required')}
     ${field('nick', '暱稱', 'maxlength="12" autocomplete="nickname" required', '牌桌上顯示的名字，最多 12 個字。之後只能在大廳改一次，請想好再填')}
     ${field('email', 'Email（選填）', 'type="email" autocomplete="email" autocapitalize="none"', '忘記密碼時用來重設；填了的話，之後請用這個 Email 登入')}
-    ${note(err)}<button class="btn red" type="submit">註冊並登入</button>${pbar([['local', '單機練習']])}</form>`),
+    ${note(err)}<button class="btn red" type="submit">註冊並登入</button>${pbar([['local', '單機練習'], ['install', '安裝到桌面']])}</form>`),
   forgot: (err, msg) => showGate(`<form class="panel gp" data-f="forgot" novalidate><h3>忘記密碼</h3>
     ${field('email', '註冊時填的 Email', 'type="email" autocomplete="email" autocapitalize="none" required')}
     <p class="small">我們會寄一封重設密碼的信到這個 Email。註冊時沒有填 Email 的帳號沒辦法自己重設，請找架設這個網站的人幫忙。</p>
@@ -546,7 +709,7 @@ const V = {
       <button type="button" class="btn red" data-go="create">建立新房間</button>
       <form class="joinrow" data-f="join" novalidate>${field('code', '或輸入房號加入', 'inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" placeholder="6 位數字"')}<button class="btn" type="submit">加入</button></form>
       ${rec.length ? `<div class="recent"><span>最近的房間</span>${rec.map(r => `<button type="button" class="chip" data-room="${r}">${r}</button>`).join('')}</div>` : ''}
-      ${note(err, msg)}${pbar([['ranking', '排行榜'], ['profile', '個人資料'], ['local', '單機練習'], ['logout', '登出']])}</div>`);
+      ${note(err, msg)}${pbar([['ranking', '排行榜'], ['profile', '個人資料'], ['local', '單機練習'], ['install', '安裝'], ['logout', '登出']])}</div>`);
   },
 };
 
@@ -559,9 +722,12 @@ const ICON = {
   me: svg('<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'),
   local: svg('<rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V4M10 4h4"/><circle cx="9.5" cy="13" r="1.2" fill="#fff"/><circle cx="14.5" cy="13" r="1.2" fill="#fff"/><path d="M9.5 16.5h5M3 12v3M21 12v3"/>'),
   out: svg('<path d="M14 4H6v16h8"/><path d="M11 12h10M17 8l4 4-4 4"/>'),
+  install: svg('<rect x="6.5" y="2.5" width="11" height="19" rx="2.2"/><path d="M12 7.5v7M9 11.5l3 3 3-3M10.5 18.5h3"/>'),
 };
-const iconBtn = (go, label) => `<button type="button" class="cbtn" data-go="${go}"><span class="ib" aria-hidden="true">${ICON[go === 'logout' ? 'out' : go === 'local' ? 'local' : go === 'ranking' ? 'rank' : 'me']}</span>${label}</button>`;
-const pbar = items => `<div class="pbar">${items.map(([g, l]) => iconBtn(g, l)).join('')}</div>`;
+const iconBtn = (go, label) => `<button type="button" class="cbtn" data-go="${go}"><span class="ib" aria-hidden="true">${ICON[go === 'logout' ? 'out' : go === 'local' ? 'local' : go === 'ranking' ? 'rank' : go === 'install' ? 'install' : 'me']}</span>${label}</button>`;
+// 已經從桌面圖示打開的就不顯示「安裝」
+const installed = () => matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+const pbar = items => `<div class="pbar">${items.filter(([g]) => g !== 'install' || !installed()).map(([g, l]) => iconBtn(g, l)).join('')}</div>`;
 
 /* ---------- 個人紀錄、排行榜、牌型圖鑑 ---------- */
 // 圖鑑收集的牌型（與遊戲裡會跳特效的牌型相同，加上兩個花牌特殊胡）
@@ -585,6 +751,7 @@ window.mjStats = {
         d.keys = Array.isArray(d.keys) ? d.keys : []; d.pats = d.pats && typeof d.pats === 'object' ? d.pats : {};
         if (d.keys.includes(e.key)) return;               // 已經記過
         d.keys = d.keys.concat(e.key).slice(-30);
+        if (e.rec && typeof e.rec === 'object') d.recent = [e.rec].concat(Array.isArray(d.recent) ? d.recent : []).slice(0, 10);   // 最近 10 局
         if (e.rank) {                                      // 四位都是真人才算排行
           d.n++; if (e.won) d.w++; if (e.dealin) d.d++;
           if (e.won && (!d.best || e.tai > d.best.t)) d.best = { t: e.tai, p: (e.items || []).slice(0, 8), at: Date.now() };
@@ -646,10 +813,23 @@ async function openProfile(editing) {
   const enough = d.n >= MIN_HANDS, more = `再 ${MIN_HANDS - d.n} 局上榜`;
   const stats = `<div class="stg">${st('參加局數', d.n, '四位都是真人的牌局')}${st('胡牌率', d.n ? pct(d.w / d.n) : '—', enough ? `胡 ${d.w} 局` : more)}${st('防禦率（放槍率）', d.n ? pct(d.d / d.n) : '—', enough ? `放槍 ${d.d} 局，越低越好` : more)}</div>
     <div class="stc wide"><span>最大一把</span><b>${d.best ? d.best.t + ' 台' : '—'}</b><small>${d.best ? `${esc((d.best.p || []).join('、') || '—')}・${ymd(d.best.at)}` : '還沒有在真人牌局胡過牌'}</small></div>`;
+  // 最近 10 局：點一下展開那一局胡的牌
+  const rec = Array.isArray(d.recent) ? d.recent.filter(x => x && typeof x === 'object') : [];
+  const TAGN = { zm: '自摸', hu: '胡', fq: '放槍', bz: '被自摸', ns: '沒事', lj: '流局' }, cnt = k => rec.filter(x => x.r === k).length;
+  const net = rec.reduce((a, x) => a + (Number(x.s) || 0), 0), sg = n => (n > 0 ? '+' : '') + n;
+  const when = t => { const x = new Date(t), n = new Date(), hm = `${x.getHours()}:${String(x.getMinutes()).padStart(2, '0')}`; return x.toDateString() === n.toDateString() ? hm : `${x.getMonth() + 1}/${x.getDate()} ${hm}`; };
+  const T = (k, c) => (window.mjTile ? window.mjTile(k, c) : '');
+  const handH = h => { if (!h) return ''; let mk = false; const conc = (h.c || []).map(k => { const w = !mk && k === h.w; if (w) mk = true; return T(k, w ? 'win' : ''); }).join('');
+    return (h.m || []).map(m => `<span class="g7">${m.map(k => T(k)).join('')}</span>`).join('') + `<span class="g7">${conc}</span>` + ((h.f || []).length ? `<span class="g7">${h.f.map(k => T(k)).join('')}</span>` : ''); };
+  const recent = `<h3 class="dexh">最近 10 局 ${rec.length ? `<small>胡 ${cnt('hu')}・自摸 ${cnt('zm')}・放槍 ${cnt('fq')}・淨 <b class="${net > 0 ? 'pos' : net < 0 ? 'neg' : ''}">${sg(net)}</b></small>` : ''}</h3>
+    ${rec.length ? `<ol class="r7">${rec.map((x, i) => `<li${x.h ? ` class="ex" data-rec="${i}" role="button" tabindex="0" aria-expanded="false"` : ''}><span class="tm7">${when(x.at)}</span><span class="tg7 ${esc(x.r)}">${TAGN[x.r] || ''}</span>
+      <span class="d7">${esc(x.d || '')}${x.b ? '<i class="bt7">有電腦</i>' : ''}</span><b class="s7 ${x.s > 0 ? 'p' : x.s < 0 ? 'n' : ''}">${sg(Number(x.s) || 0)}</b>
+      ${x.h ? `<div class="ex7" hidden><div class="lay h7">${handH(x.h)}</div><small>房 ${esc(x.room || '')}・第 ${Number(x.hn) || ''} 局</small></div>` : ''}</li>`).join('')}</ol><p class="small">有胡牌的局可以點一下，看那一手牌。最近戰績也包含有電腦的牌局。</p>`
+      : '<p class="small">還沒有紀錄，在房間裡打完一局就會出現在這裡。</p>'}`;
   const got = COLLECT.filter(p => d.pats[p]).length;
   const dex = `<h3 class="dexh">牌型圖鑑 <small>${got} / ${COLLECT.length}</small></h3><p class="small">從台數最大、最難胡的排到台數最小、最常見的；胡過的會亮起來。只計算四位都是真人的牌局。</p>
     <div class="dex">${DEX.map(([p, t]) => d.pats[p] ? `<span class="got">${p}<small>${t} 台・×${d.pats[p]}</small></span>` : `<span>${p}<small>${t} 台</small></span>`).join('')}</div>`;
-  showSheet(sheetHead('個人資料') + nameRow + (ME.user ? `<p class="small">帳號：${esc(ME.user)}</p>` : '') + stats + dex);
+  showSheet(sheetHead('個人資料') + nameRow + (ME.user ? `<p class="small">帳號：${esc(ME.user)}</p>` : '') + stats + recent + dex);
 }
 async function doRename(f) {
   const n = f.nick.value.replace(/\s+/g, ' ').trim().slice(0, 12), e = f.querySelector('.gerr');
@@ -662,8 +842,48 @@ async function doRename(f) {
     openProfile(false);
   } catch (x) { e.hidden = false; e.textContent = '改名失敗：你可能已經改過一次了，或網路不穩。'; }
 }
-window.mjPanels = { profile: () => openProfile(false), ranking: () => openRanking('hu') };
+/* ---------- 安裝到手機桌面：依手機顯示教學；Android 的 Chrome 可以直接一鍵安裝 ---------- */
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; });
+window.addEventListener('appinstalled', () => { installEvt = null; if (sheet && sheet.querySelector('.inst')) showSheet(sheetHead('安裝到桌面') + '<p class="inst-ok">安裝好了！之後從手機桌面的「十六張麻將」圖示打開就可以。</p>'); });
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+const UA = navigator.userAgent || '';
+const isIOS = /iPhone|iPad|iPod/i.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+const inApp = /Line\//i.test(UA) ? 'LINE' : /FBAN|FBAV|FB_IAB/i.test(UA) ? 'Facebook' : /Instagram/i.test(UA) ? 'Instagram' : '';
+const IC = {
+  share: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2f7fe0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9H5v12h14V9h-2"/><path d="M12 15V3M8 7l4-4 4 4"/></svg>',
+  add: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>',
+  dots: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+  hdots: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+};
+const steps = list => `<ol class="isteps">${list.map(x => `<li><span>${x}</span></li>`).join('')}</ol>`;
+function openInstall(tab) {
+  const plat = tab || (isIOS ? 'ios' : 'android');
+  if (installed()) { showSheet(sheetHead('安裝到桌面') + '<p class="inst-ok">你現在就是從桌面圖示打開的，已經安裝好了。</p>'); return; }
+  const tabs = `<div class="tabs" role="tablist">${[['ios', 'iPhone／iPad'], ['android', 'Android']].map(([k, n]) => `<button type="button" role="tab" class="tab${k === plat ? ' on' : ''}" aria-selected="${k === plat}" data-inst="${k}">${n}</button>`).join('')}</div>`;
+  let body;
+  if (inApp && !tab) body = `<div class="inapp"><b>現在是在 ${inApp} 裡面打開的</b><p>${inApp} 裡面沒辦法安裝，請先換成${isIOS ? ' Safari' : '手機的瀏覽器（例如 Chrome）'}打開：</p>
+    ${steps([`點右上角的 <span class="ki">${IC.hdots}</span> 或 <span class="ki">${IC.share}</span>`, `選「${isIOS ? '用 Safari 開啟' : '用預設瀏覽器開啟'}」`, '打開後再按一次「安裝」照著做'])}
+    <button type="button" class="btn ghost sm" data-copylink>複製網址</button></div>`;
+  else if (plat === 'ios') body = steps([`用 <b>Safari</b> 打開這個網站，點下方的「分享」<span class="ki">${IC.share}</span>`, `往下滑，點「加入主畫面」<span class="ki">${IC.add}</span>`, '右上角點「加入」，桌面就會出現「十六張麻將」']) +
+    '<p class="small">用 iPhone 的 Chrome 也可以：網址列右邊的分享按鈕 → 加入主畫面。</p>';
+  else body = (installEvt ? '<button type="button" class="btn red ibig" data-install-now>一鍵安裝到桌面</button><p class="small">按了之後在跳出的視窗點「安裝」。沒有反應的話，照下面的步驟做：</p>' : '') +
+    steps([`用 <b>Chrome</b> 打開這個網站，點右上角的 <span class="ki">${IC.dots}</span>`, '點「安裝應用程式」（有些手機叫「加到主畫面」）', '再點「安裝」，桌面就會出現「十六張麻將」']) +
+    '<p class="small">三星瀏覽器：下方選單 → 新增頁面至 → 主螢幕。</p>';
+  showSheet(sheetHead('安裝到桌面') + `<div class="inst"><div class="ihero"><img src="icon-192.png" alt="" width="64" height="64"><p>加到手機桌面以後，點圖示就直接打開，<b>橫放是全螢幕</b>，沒有網址列，牌也比較大。</p></div>${tabs}${body}
+    <p class="small inote">從桌面圖示打開的時候，第一次要再登入一次。朋友傳來的邀請連結還是會用瀏覽器打開。</p></div>`);
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('#sheet [data-inst], #sheet [data-install-now], #sheet [data-copylink]'); if (!t) return;
+  if (t.dataset.inst) openInstall(t.dataset.inst);
+  else if (t.hasAttribute('data-copylink')) { try { await navigator.clipboard.writeText(location.origin + location.pathname); t.textContent = '已複製，貼到瀏覽器打開'; } catch (x) { t.textContent = location.origin + location.pathname; } }
+  else if (installEvt) { const ev = installEvt; installEvt = null; try { await ev.prompt(); await ev.userChoice; } catch (x) { /* ignore */ } openInstall('android'); }
+});
+window.mjPanels = { profile: () => openProfile(false), ranking: () => openRanking('hu'), install: () => openInstall() };
+const toggleRec = li => { const x = li.querySelector('.ex7'); if (!x) return; x.hidden = !x.hidden; li.classList.toggle('op', !x.hidden); li.setAttribute('aria-expanded', String(!x.hidden)); };
+document.addEventListener('keydown', e => { const li = (e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('#sheet [data-rec]'); if (li) { e.preventDefault(); toggleRec(li); } });
 document.addEventListener('click', e => {
+  const li = e.target.closest('#sheet [data-rec]'); if (li) { toggleRec(li); return; }
   const t = e.target.closest('#sheet [data-rank], #sheet [data-prof]'); if (!t) return;
   if (t.dataset.rank) openRanking(t.dataset.rank); else openProfile(t.dataset.prof === 'edit');
 });
@@ -778,6 +998,7 @@ function wireGate() {
     const g = b.dataset.go;
     if (g === 'login' || g === 'register' || g === 'forgot') V[g]();
     else if (g === 'ranking') openRanking('hu');
+    else if (g === 'install') openInstall();
     else if (g === 'profile') openProfile(false);
     else if (g === 'create') { busy = true; b.disabled = true; b.textContent = '建立中…'; try { await createRoom(); } finally { busy = false; } }
     else if (g === 'logout') { try { await signOut(auth); } catch (x) { /* ignore */ } leave(); }
@@ -1085,6 +1306,8 @@ function startHand(G, now) {
   for (let r = 0; r < 16; r++) for (let i = 0; i < 4; i++) G.hands[(G.dealer + i) % 4].push(G.wall.shift());
   for (let i = 0; i < 4; i++) if (!replaceFlowers(G, (G.dealer + i) % 4, now)) return;
   draw(G, G.dealer, 'front', now);
+  // 發牌動畫的時間：莊家的出牌時間從動畫結束後才開始算
+  if (G.phase === 'play' && G.stage === 'discard' && G.cfg.dealMs > 0) G.turnStart = now + G.cfg.dealMs;
 }
 function replaceFlowers(G, s, now) {
   const h = G.hands[s];
@@ -1432,10 +1655,12 @@ const MJ = window.MJ;
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const DEF_CFG = { base: 50, per: 20, rounds: 1, claimMs: 12000, turnMs: 12000, botMs: 850, nextMs: 30000 };
+const DEF_CFG = { base: 50, per: 20, rounds: 1, claimMs: 12000, turnMs: 12000, botMs: 850, nextMs: 30000, dealMs: 3200 };
 const newTid = () => Math.random().toString(36).slice(2, 10);
 const CLAIMS = ['discard', 'tsumo', 'akong', 'jkong', 'hu', 'pong', 'kong', 'chi', 'pass'];
-const PRESETS = [[30, 10], [50, 20], [100, 20], [300, 100]];
+const PRESETS = [[30, 10], [50, 20]];
+const THINK = [6000, 12000, 18000]; // 房主可選的思考時間（出牌、吃碰胡共用）
+const okThink = t => THINK.includes(t) ? t : DEF_CFG.turnMs;
 const ROUNDS = [[1, '一圈'], [2, '兩圈'], [4, '一將（四圈）']];
 const SEATN = ['東位', '南位', '西位', '北位'];
 const BOTN = ['電腦甲', '電腦乙', '電腦丙', '電腦丁'];
@@ -1690,7 +1915,8 @@ const Host = {
   on: false, G: null, lobby: null, v: 0, tid: '', lastN: {}, chain: {}, busy: false, dirty: false,
   saveDirty: false, saving: false, lastSave: 0, lastLease: 0, lastPoll: 0, startedAt: 0,
   start(lobby, G, v, tid) {
-    if (G && G.cfg) { G.cfg.turnMs = DEF_CFG.turnMs; G.cfg.claimMs = DEF_CFG.claimMs; }
+    if (G && G.cfg) { G.cfg.turnMs = G.cfg.claimMs = okThink(G.cfg.turnMs); if (G.cfg.dealMs == null) G.cfg.dealMs = DEF_CFG.dealMs; }
+    if (lobby && lobby.cfg) lobby.cfg = { ...DEF_CFG, ...lobby.cfg, turnMs: okThink(lobby.cfg.turnMs) };
     Object.assign(this, { on: true, lobby, G, v: v || 0, tid: tid || newTid(), chain: {}, away: {}, startedAt: Date.now(), lastLease: Date.now() });
     Ticker.start(() => this.tick());
   },
@@ -1761,6 +1987,7 @@ const Host = {
       if (a.t === 'sit' && Number.isInteger(a.s) && a.s >= 0 && a.s < 4 && !L.seats[a.s]) {
         L.seats = L.seats.map(x => x && x.uid === uid ? null : x); L.seats[a.s] = { uid }; this.commit();
       } else if (a.t === 'stand') { L.seats = L.seats.map(x => x && x.uid === uid ? null : x); this.commit(); }
+      else if (a.t === 'lready') { const i = L.seats.findIndex(x => x && x.uid === uid); if (i >= 0) { L.seats[i] = { uid, ready: !!a.on }; this.commit(); } }
       return;
     }
     const s = G.seats.findIndex(x => x && x.uid === uid);
@@ -1995,8 +2222,8 @@ async function quitLocal() {
 function startMatch() {
   const L = Host.lobby; if (!L) return;
   L.seats = L.seats.map(x => x || { bot: true });
-  const c = L.cfg || DEF_CFG;
-  const G = MJ.newMatch({ ...DEF_CFG, base: c.base, per: c.per, rounds: c.rounds }, L.seats.map(x => ({ ...x })));
+  const c = L.cfg || DEF_CFG, tm = okThink(c.turnMs);
+  const G = MJ.newMatch({ ...DEF_CFG, base: c.base, per: c.per, rounds: c.rounds, turnMs: tm, claimMs: tm }, L.seats.map(x => x.bot ? { bot: true } : { uid: x.uid }));
   MJ.startHand(G, Date.now()); Host.G = G; App.hideRes = -1; Host.commit();
   if (App.net && L.seats.some(x => x && x.uid && x.uid !== App.uid)) toast('你是房主：請把這個頁面留在前景，不要縮小或切走，大家才不會卡住。');
 }
@@ -2007,7 +2234,7 @@ function again() {
 function toLobby() {
   if (App.local) return quitLocal();
   if (!Host.on) return;
-  if (Host.G) Host.lobby.seats = Host.G.seats.map(x => x && !x.bot ? x : null);
+  if (Host.G) Host.lobby.seats = Host.G.seats.map(x => x && !x.bot ? { uid: x.uid } : null);
   Host.G = null; App.ov = null; Host.commit();
 }
 
@@ -2082,18 +2309,20 @@ function render() {
   }
   const app = $('#app');
   if (V.screen === 'game' && V.game.phase !== 'over') {
-    if (App.shell !== 'game') { app.innerHTML = GAME_SHELL; App.shell = 'game'; for (const k in cache) delete cache[k]; }
+    if (App.shell !== 'game') { if (App.dealStop) App.dealStop(); app.innerHTML = GAME_SHELL; App.shell = 'game'; for (const k in cache) delete cache[k]; }
+    const snap = snapTable(V);
     const P = gameParts(V);
     for (const [id, html, cls] of P) setPart(id, html, cls);
     if (V.game.phase === 'play') App.playSeen = V.game.handNo;
-    checkFx(V.game); checkStk(V); recordStats(V);
+    checkDeal(V); animTable(V, snap);
+    checkFx(V.game); checkStk(V); recordStats(V); checkTurnSound(V);
   } else {
     const html = V.screen === 'game' ? overHTML(V) : V.screen === 'lobby' ? lobbyHTML(V) : startHTML();
     if (App.shell !== html) { app.innerHTML = html; App.shell = html; }
   }
   const ov = overlayHTML(V);
   if (cache.ov !== ov) { cache.ov = ov; $('#ov').innerHTML = ov; }
-  updateTimers();
+  updateTimers(); syncPill();
   if (App.net && !App.local) refreshNames(V);
 }
 // 過場畫面：紅中、發財、白板輪流跳動
@@ -2121,41 +2350,66 @@ function startHTML() {
     <div><b>2．邀請</b>${App.feat.site ? '把這個網址傳給牌友（例如貼到 LINE），他們打開、輸入暱稱就能入座。' : '用 Claude 的分享選單把這頁分享給牌友，並給他們可互動（或編輯）權限。'}</div>
     <div><b>3．入座開打</b>牌友開啟後點座位入座，房主按開始。手牌經加密，只有本人看得到。</div></div></main>`;
 }
+const CROWN = '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="#ffd54a"/></svg>';
+const betLabel = c => PRESETS.some(([b, p]) => c.base === b && c.per === p) ? '' : `${c.base}/${c.per}`;
 function lobbyHTML(V) {
   const L = V.lobby, me = myId(), host = V.isHost, mySeat = L.seats.findIndex(x => x && x.uid === me);
   const canSit = App.canWrite !== false;
   const filled = L.seats.filter(Boolean).length;
+  const others = L.seats.filter(x => x && x.uid && x.uid !== V.hostId), readyN = others.filter(x => x.ready).length;
+  const allReady = others.length > 0 && readyN === others.length;
   const seatsH = [0, 1, 2, 3].map(s => {
     const p = (s - Math.max(mySeat, 0) + 4) % 4, x = L.seats[s];
-    let body;
-    if (!x) body = `<div class="nm">空位</div><div class="row">${canSit ? `<button class="btn sm" data-a="sit" data-s="${s}">${mySeat >= 0 ? '換到這裡' : '入座'}</button>` : ''}${host ? `<button class="btn sm ghost" data-a="bot" data-s="${s}">放電腦</button>` : ''}</div>`;
-    else if (x.bot) body = `<div class="nm">${BOTN[s]}</div><div class="row"><span class="tag">電腦</span>${host ? `<button class="btn sm ghost" data-a="unseat" data-s="${s}">移除</button>` : ''}</div>`;
-    else {
-      const isMe = x.uid === me;
-      body = `<div class="nm">${esc(seatName(s, L.seats))}${dotHTML(x.uid)}</div><div class="row">${isMe ? '<span class="tag you">你</span>' : ''}${x.uid === V.hostId ? '<span class="tag">房主</span>' : ''}${isMe ? '<button class="btn sm ghost" data-a="stand">離座</button>' : host ? `<button class="btn sm ghost" data-a="unseat" data-s="${s}">請離座</button>` : ''}</div>`;
+    if (!x) {
+      const btns = (canSit ? `<button class="sb" data-a="sit" data-s="${s}">${mySeat >= 0 ? '坐這裡' : '入座'}</button>` : '') + (host ? `<button class="sb" data-a="bot" data-s="${s}">放電腦</button>` : '');
+      return `<div class="lseat q${p} empty"><span class="lav">${W[s]}</span><b class="ln">空位</b>${btns ? `<span class="sbs">${btns}</span>` : ''}</div>`;
     }
-    return `<div class="seat p${p} ${x ? '' : 'empty'}"><div class="lab">${SEATN[s]}</div>${body}</div>`;
+    if (x.bot) return `<div class="lseat q${p} bot"><span class="lav">${W[s]}</span><b class="ln">${BOTN[s]}</b><span class="lst bt">電腦</span>${host ? `<button class="lx" data-a="unseat" data-s="${s}" aria-label="移除電腦">×</button>` : ''}</div>`;
+    const isMe = x.uid === me, isHost = x.uid === V.hostId;
+    const st = isHost ? `<span class="lst hs">${CROWN}房主</span>` : x.ready ? '<span class="lst ok">● 準備好</span>' : '<span class="lst wt">● 還沒準備</span>';
+    const x2 = isMe ? '<button class="lx" data-a="stand" aria-label="離座" title="離座">×</button>' : host ? `<button class="lx" data-a="unseat" data-s="${s}" aria-label="請離座" title="請離座">×</button>` : '';
+    return `<div class="lseat q${p}${isMe ? ' me' : ''}"><span class="lav">${W[s]}</span><b class="ln">${esc(seatName(s, L.seats))}${dotHTML(x.uid)}</b>${st}${x2}</div>`;
   }).join('');
-  const c = L.cfg || DEF_CFG, dis = host ? '' : 'disabled';
-  const preset = PRESETS.map(([b, p]) => `<button class="chip" data-a="cfg" data-b="${b}" data-p="${p}" aria-pressed="${c.base === b && c.per === p}" ${dis}>${b} / ${p}</button>`).join('');
-  const rounds = ROUNDS.map(([n, t]) => `<button class="chip" data-a="cfg" data-r="${n}" aria-pressed="${c.rounds === n}" ${dis}>${t}</button>`).join('');
+  const c = { ...DEF_CFG, ...(L.cfg || {}) }, dis = host ? '' : 'disabled', custom = betLabel(c);
+  const chip = (on, attrs, label) => `<button class="c2" ${attrs} aria-pressed="${on}" ${dis}>${label}</button>`;
+  const bets = PRESETS.map(([b, p]) => chip(c.base === b && c.per === p, `data-a="cfg" data-b="${b}" data-p="${p}"`, `${b}/${p}`)).join('') + chip(!!custom, 'data-a="cfgcustom"', custom ? `自訂 ${custom}` : '自訂');
+  const rounds = ROUNDS.map(([n, t]) => chip(c.rounds === n, `data-a="cfg" data-r="${n}"`, n === 4 ? '一將' : t)).join('');
+  const think = THINK.map(t => chip(okThink(c.turnMs) === t, `data-a="cfg" data-t="${t}"`, `${t / 1000} 秒`)).join('');
   const hostName = V.hostId ? (V.isHost ? '你' : esc(App.names[V.hostId] || '房主')) : '房主';
-  const foot = host
-    ? `<button class="btn red" data-a="start">${filled < 4 ? '開始（空位由電腦補上）' : '開始牌局'}</button>`
-    : `<p class="small">等待 ${hostName} 開始牌局…</p>`;
+  const mine = mySeat >= 0 ? L.seats[mySeat] : null;
+  let foot;
+  if (host) foot = `<button class="btn red go${allReady ? ' hot' : ''}" data-a="start">${filled < 4 ? '開始（空位由電腦補上）' : '開始牌局'}</button>`;
+  else if (mine) foot = `<button class="btn go ${mine.ready ? 'ghost' : 'red'}" data-a="lready" data-on="${mine.ready ? 0 : 1}">${mine.ready ? '取消準備' : '準備'}</button>`;
+  else foot = `<span class="lwait">${canSit ? '點空位入座' : '你目前只能觀看'}</span>`;
+  const sub = host ? (others.length ? (allReady ? '大家都準備好了，可以開始！' : `${readyN} / ${others.length} 位玩家準備好了（也可以不等，直接開始）`) : '朋友入座後會顯示準備狀態')
+    : mine ? (mine.ready ? `已準備，等待 ${hostName} 開始…` : `按「準備」讓 ${hostName} 知道你好了`) : `等待 ${hostName} 開始牌局…`;
   const acc = window.mjAccount;
-  const roomBox = acc ? `<div class="roombox"><span>房號</span><b>${esc(acc.room)}</b><button class="btn sm" data-a="invite">邀請朋友</button></div>` : '';
-  return `<main class="lobby"><h1>台灣十六張麻將</h1>${roomBox}
-    <p class="note">${mySeat >= 0 ? '你已入座。' : canSit ? '點空位入座。' : '你目前只能觀看。'}${App.feat.site ? '把網址傳給牌友，他們打開後就能入座。' : '把這頁分享給牌友，他們開啟後就能入座。'}</p>
-    ${window.mjPanels ? `<div class="licons"><button class="ib" data-a="profile" aria-label="個人資料" title="個人資料">${ICON_ME}</button><button class="ib" data-a="ranking" aria-label="排行榜" title="排行榜">${ICON_RANK}</button></div>` : App.feat.nickname ? `<p class="note">你的暱稱：<b>${esc(myNick() || '（未設定）')}</b> <button class="btn ghost sm" data-a="nick">修改</button></p>` : ''}
-    ${App.err ? `<div class="err">${esc(App.err)}</div>` : ''}
-    ${hostAway(V) ? awayBanner() : ''}
-    <div class="ltable">${seatsH}<div class="mid">${filled < 4 ? `等待入座<br>${filled} / 4` : '人數到齊'}</div></div>
-    <section class="panel"><h3>牌局設定${host ? '' : '（由房主決定）'}</h3>
-      <div class="opt"><span>底 / 台</span>${preset}</div><div class="opt"><span>圈數</span>${rounds}</div>
-      <p class="small">放槍者付「底＋台數×每台」；自摸由三家各付一份。和莊家有關的付款另加莊家台與連莊台。</p>
-      <div class="foot">${foot}<span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" data-a="rules">規則與台數</button>${host ? '<button class="btn ghost sm" data-a="dissolve">解散牌桌</button>' : ''}</span></div>
-    </section></main>`;
+  const room = acc ? `<div class="lroom"><span>房號</span><b>${esc(acc.room)}</b><button class="cpb" data-a="copyroom">複製</button><button class="btn sm gold" data-a="invite">邀請朋友</button></div>`
+    : `<p class="note lroom0">${mySeat >= 0 ? '你已入座。' : canSit ? '點空位入座。' : '你目前只能觀看。'}把這頁分享給牌友，他們開啟後就能入座。</p>`;
+  const icons = window.mjPanels ? `<span class="lic"><button class="ib" data-a="profile" aria-label="個人資料" title="個人資料">${ICON_ME}</button><button class="ib" data-a="ranking" aria-label="排行榜" title="排行榜">${ICON_RANK}</button></span>`
+    : App.feat.nickname ? `<button class="btn ghost sm" data-a="nick">暱稱：${esc(myNick() || '未設定')}</button>` : '';
+  const msg = (App.err ? `<div class="err">${esc(App.err)}</div>` : '') + (hostAway(V) ? awayBanner() : '');
+  return `<main class="lobby2"><div class="ltop"><h1>台灣十六張麻將</h1>${icons}</div>${room}<div class="lmsg">${msg}</div>
+    <div class="ltb"><div class="lfelt"></div><div class="ldial"><small>${filled < 4 ? '等待入座' : '人數到齊'}</small><b>${filled} / 4</b><small>${(ROUNDS.find(r => r[0] === c.rounds) || [0, ''])[1].replace('（四圈）', '')}</small></div>${seatsH}</div>
+    <section class="lset"><div class="lsh"><b>牌局設定</b><small>${host ? '只有房主可以改' : '由房主決定'}</small></div>
+      <div class="lo"><span class="lb">打多大</span>${bets}</div><div class="lo"><span class="lb">圈數</span>${rounds}</div><div class="lo"><span class="lb">思考時間</span>${think}</div>
+      <p class="lsm">底 ${c.base}、每台 ${c.per}：放槍者付「底＋台數×每台」，自摸三家各付一份。</p></section>
+    <div class="lft"><p class="lsub">${sub}</p><div class="lbt">${foot}<button class="btn ghost sm" data-a="rules">規則</button>${host ? '<button class="btn ghost sm" data-a="dissolve">解散</button>' : ''}</div></div></main>`;
+}
+// 自訂打多大：底與每台
+function customHTML() {
+  const c = { ...DEF_CFG, ...((App.V && App.V.lobby && App.V.lobby.cfg) || {}) };
+  return `<div class="card menu"><div class="mh"><h3>自訂打多大</h3><button class="xb" data-a="close" aria-label="關閉">×</button></div>
+    <div class="cbet"><label class="fld"><span>底</span><input id="cb-base" class="nick" type="number" inputmode="numeric" min="1" max="100000" step="1" value="${c.base}"></label>
+    <label class="fld"><span>每台</span><input id="cb-per" class="nick" type="number" inputmode="numeric" min="1" max="100000" step="1" value="${c.per}"></label></div>
+    <p class="small">放槍者付「底＋台數×每台」，自摸三家各付一份。只能填 1 到 100000 的整數。</p><p class="gerr" id="cb-err" hidden></p>
+    <div class="foot"><button class="btn ghost" data-a="close">取消</button><button class="btn red" data-a="cfgcustom!">確定</button></div></div>`;
+}
+function saveCustom() {
+  const v = id => { const el = document.getElementById(id); const n = el ? Number(el.value) : NaN; return Number.isInteger(n) && n >= 1 && n <= 100000 ? n : null; };
+  const b = v('cb-base'), p = v('cb-per'), er = document.getElementById('cb-err');
+  if (b == null || p == null) { if (er) { er.hidden = false; er.textContent = '底和每台都要填 1 到 100000 的整數。'; } return; }
+  if (Host.on && !Host.G) { Host.lobby.cfg = { ...Host.lobby.cfg, base: b, per: p }; App.ov = null; Host.commit(); }
 }
 function awayBanner() {
   return `<div class="banner">房主目前離線。可以等房主回來，或由你接手主持（本局重新發牌，分數與圈數保留）。<button class="btn sm" data-a="takeover">接手主持</button></div>`;
@@ -2187,7 +2441,7 @@ function gameParts(V) {
   const badge = s => `<span class="wd ${s === g.dealer ? 'dealer' : ''}" title="${s === g.dealer ? '莊家' : ''}">${W[sw(s)]}</span>`;
   const P = [];
   const roundName = `${W[g.wind % 4]}風${W[(g.dealer - g.startDealer + 4) % 4]}`;
-  const hudBits = [window.mjAccount ? '房 ' + window.mjAccount.room : '', g.streak ? '連' + g.streak : '', g.cfg.base + '/' + g.cfg.per, App.local ? '單機' : '', lagText(V).replace(' · ', '')].filter(Boolean);
+  const hudBits = [window.mjAccount ? '房 ' + window.mjAccount.room : '', g.streak ? '連' + g.streak : '', g.cfg.base + '/' + g.cfg.per, Math.round(g.cfg.turnMs / 1000) + '秒', App.local ? '單機' : '', lagText(V).replace(' · ', '')].filter(Boolean);
   P.push(['r-hud', `<span class="rd">${roundName}<small>${hudBits.map(b => `<span>${b}</span>`).join('')}</small></span><span class="sp"></span>
     ${V.mySeat >= 0 ? `<button class="ib" data-a="stkopen" aria-label="貼圖">${ICON_SMILE}</button>` : ''}<button class="ib" data-a="menu" aria-label="設定與選單">${ICON_GEAR}</button>`]);
   P.push(['r-ban', (hostStale(V) || (App.feat.presence && hostAway(V)) ? staleBanner() : '') + (App.err ? `<div class="err">${esc(App.err)}</div>` : '')]);
@@ -2298,6 +2552,253 @@ function barHTML(g, o, tiles, melds, me) {
   }
   return P.join('');
 }
+/* ================= 音效：用程式即時合成，不需要音檔 ================= */
+const Snd = {
+  on: true, ctx: null, out: null, nb: null, kicked: false,
+  init() { try { this.on = localStorage.getItem('mj-sound') !== '0'; } catch (e) { /* 預設開 */ } },
+  ensure() {
+    if (this.ctx) return this.ctx;
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+    try { this.ctx = new AC(); this.out = this.ctx.createGain(); this.out.gain.value = .55; this.out.connect(this.ctx.destination); } catch (e) { this.ctx = null; }
+    return this.ctx;
+  },
+  // 瀏覽器規定要先點一下畫面才能出聲：每次點擊都順便叫醒
+  unlock() {
+    if (!this.on) return;
+    const c = this.ensure(); if (!c) return;
+    if (c.state !== 'running') c.resume().then(syncPill, () => {});
+    if (!this.kicked) { this.kicked = true; try { const b = c.createBuffer(1, 1, 22050), x = c.createBufferSource(); x.buffer = b; x.connect(c.destination); x.start(0); } catch (e) { /* ignore */ } }
+    setTimeout(syncPill, 60);
+  },
+  ready() { return !!(this.on && this.ctx && this.ctx.state === 'running'); },
+  set(on) { this.on = !!on; try { localStorage.setItem('mj-sound', on ? '1' : '0'); } catch (e) { /* 只在這次有效 */ } if (on) this.unlock(); syncPill(); },
+  env(g, t, a, peak, d) { g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(.0001, t + a + d); },
+  tone(f, d, o = {}) {
+    const c = this.ctx, t = c.currentTime + (o.at || 0), os = c.createOscillator(), g = c.createGain(), a = o.a || .005;
+    os.type = o.type || 'sine'; os.frequency.setValueAtTime(f, t); if (o.to) os.frequency.exponentialRampToValueAtTime(o.to, t + a + d);
+    this.env(g, t, a, o.v || .2, d); os.connect(g); g.connect(this.out); os.start(t); os.stop(t + a + d + .05);
+  },
+  noise(d, o = {}) {
+    const c = this.ctx, t = c.currentTime + (o.at || 0);
+    if (!this.nb) { this.nb = c.createBuffer(1, Math.floor(c.sampleRate * 1.2), c.sampleRate); const ch = this.nb.getChannelData(0); for (let i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1; }
+    const x = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    x.buffer = this.nb; f.type = o.type || 'bandpass'; f.frequency.value = o.f || 2000; f.Q.value = o.q || 1;
+    this.env(g, t, o.a || .002, o.v || .2, d); x.connect(f); f.connect(g); g.connect(this.out); x.start(t, Math.random() * .6); x.stop(t + d + .05);
+  },
+  play(name) {
+    if (!this.ready()) return;
+    try {
+      switch (name) {
+        case 'draw': this.noise(.03, { f: 3200, q: 2, v: .1 }); break;
+        case 'discard': this.noise(.07, { type: 'lowpass', f: 2600, v: .3 }); this.tone(190, .09, { to: 120, v: .2 }); break;
+        case 'turn': this.tone(880, .35, { v: .16 }); this.tone(1320, .25, { v: .06, at: .01 }); break;
+        case 'tick': this.tone(1050, .05, { type: 'square', v: .045 }); break;
+        case 'claim': this.tone(130, .25, { to: 55, v: .45 }); this.noise(.09, { type: 'lowpass', f: 1400, v: .22 }); this.tone(660, .12, { v: .1, at: .05, to: 990 }); break;
+        case 'ting': [1047, 1568, 2093].forEach((f, i) => this.tone(f, .7 - i * .15, { v: .11 - i * .03, at: i * .07 })); break;
+        case 'hu': [110, 147, 220, 262, 331, 441].forEach((f, i) => this.tone(f, 2.2 - i * .25, { v: [.32, .18, .2, .11, .09, .05][i], a: .01, to: f * .985 })); this.noise(.25, { type: 'lowpass', f: 900, v: .26 }); break;
+        case 'lj': this.tone(98, .8, { type: 'triangle', to: 70, v: .32 }); break;
+        case 'pop': this.tone(520, .09, { to: 1100, v: .13 }); break;
+        case 'dice': for (let i = 0; i < 7; i++) this.noise(.025, { f: 2400 + Math.random() * 1600, q: 3, v: .13, at: i * .09 + Math.random() * .04 }); break;
+        case 'deal': this.noise(.022, { f: 2800, q: 2, v: .06 }); break;
+        case 'coin': this.tone(1980, .12, { v: .06 }); this.tone(2960, .1, { v: .035, at: .015 }); break;
+      }
+    } catch (e) { /* 音效失敗不影響牌局 */ }
+  },
+};
+Snd.init();
+['click', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => Snd.unlock(), true));
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2a1406" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9l5 6M21 9l-5 6"/></svg>';
+const ICON_SPK = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
+// 第一次進牌桌時的提示：點一下畫面開啟音效
+function syncPill() {
+  const V = App.V, AC = window.AudioContext || window.webkitAudioContext;
+  const want = !!AC && Snd.on && !Snd.ready() && V && (V.screen === 'game' || V.screen === 'lobby');
+  let el = document.getElementById('sndpill');
+  if (!want) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('div'); el.id = 'sndpill'; el.setAttribute('role', 'status'); el.innerHTML = `<i>${ICON_MUTE}</i><span>點一下畫面開啟音效</span>`; document.body.appendChild(el); }
+}
+function checkTurnSound(V) {
+  if (App.dealing) return; // 發牌動畫結束時再響
+  const g = V.game, o = V.priv && V.priv.opts;
+  const sig = g.phase === 'play' && o && (o.turn || o.claim) && !g.auto[V.mySeat] ? `${g.handNo}:${g.dn}:${o.turn ? 't' : 'c'}` : '';
+  if (sig && sig !== App.turnSig) Snd.play('turn');
+  App.turnSig = sig;
+}
+
+/* ================= 動畫：擲骰發牌、出牌飛進牌河、手牌補位、算分 ================= */
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hashStr = x => { let h = 7; for (const ch of String(x)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
+const PIPS = n => {
+  const P = { 1: [[50, 50]], 2: [[28, 28], [72, 72]], 3: [[26, 26], [50, 50], [74, 74]], 4: [[28, 28], [72, 28], [28, 72], [72, 72]],
+    5: [[26, 26], [74, 26], [50, 50], [26, 74], [74, 74]], 6: [[28, 24], [72, 24], [28, 50], [72, 50], [28, 76], [72, 76]] }[n];
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${P.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${n === 1 ? 13 : 9}" fill="${n === 1 || n === 4 ? '#c4262e' : '#1d1a14'}"/>`).join('')}</svg>`;
+};
+function animLayer(cls) {
+  const lay = document.getElementById('anim'); if (!lay) return null;
+  const b = document.createElement('div'); b.className = cls; lay.appendChild(b); return b;
+}
+// 重新畫牌桌之前先記下手牌位置與牌河張數
+function snapTable(V) {
+  if (!document.getElementById('r-hand')) return null;
+  return { hn: App.snapHn, hand: [...document.querySelectorAll('#r-hand .t')].map(e => ({ l: e.getAttribute('aria-label'), r: e.getBoundingClientRect() })),
+    rv: [0, 1, 2, 3].map(p => document.querySelectorAll(`#r-rv${p} .t`).length) };
+}
+function animTable(V, S) {
+  const g = V.game; App.snapHn = g.handNo;
+  if (!S || S.hn !== g.handNo || App.dealing || reduceMotion()) {
+    if (S && S.hn === g.handNo && !App.dealing) for (let p = 0; p < 4; p++) if (document.querySelectorAll(`#r-rv${p} .t`).length === S.rv[p] + 1) Snd.play('discard');
+    return;
+  }
+  for (let p = 0; p < 4; p++) {
+    const els = document.querySelectorAll(`#r-rv${p} .t`);
+    if (els.length === S.rv[p] + 1) flyDiscard(p, els[els.length - 1], S);
+  }
+  flipHand(S);
+}
+function flyDiscard(p, el, S) {
+  const tr = el.getBoundingClientRect(); if (!tr.width) { Snd.play('discard'); return; }
+  let src = null;
+  if (p === 0) { const l = el.getAttribute('aria-label'); for (let i = S.hand.length - 1; i >= 0; i--) if (S.hand[i].l === l) { src = S.hand[i].r; break; } }
+  if (!src) { const b = document.querySelector(p === 0 ? '#r-mtop .who' : `#r-op${p} .backs`) || document.querySelector(`#r-op${p} .who`); if (b) src = b.getBoundingClientRect(); }
+  const box = src && animLayer('flybox'); if (!box) { Snd.play('discard'); return; }
+  const rot = [0, -90, 180, 90][p], tw = p % 2 ? tr.height : tr.width;
+  const sw = p === 0 && src.width < 90 ? src.width : tw * 1.15;
+  box.innerHTML = el.outerHTML; const t = box.firstElementChild;
+  t.classList.remove('fresh', 'last'); t.style.cssText = `--w:${sw}px;margin:0;transform:none;visibility:visible`;
+  const sx = src.left + src.width / 2, sy = src.top + src.height / 2, tx = tr.left + tr.width / 2, ty = tr.top + tr.height / 2;
+  box.style.left = (sx - sw / 2) + 'px'; box.style.top = (sy - sw * .67) + 'px';
+  el.style.visibility = 'hidden';
+  const k = tw / sw, dx = tx - sx, dy = ty - sy, up = p === 0 ? -Math.min(70, Math.abs(dy) * .45) : 0, dur = p === 0 ? 320 : 280;
+  const done = () => { if (!box.isConnected) return; box.remove(); el.style.visibility = ''; Snd.play('discard'); };
+  const a = box.animate([{ transform: 'none' }, { transform: `translate(${dx * .5}px,${dy * .5 + up}px) scale(${(1 + k) / 2}) rotate(${rot / 2}deg)`, offset: .5 },
+    { transform: `translate(${dx}px,${dy}px) scale(${k}) rotate(${rot}deg)` }], { duration: dur, easing: 'cubic-bezier(.3,.7,.4,1)', fill: 'forwards' });
+  a.onfinish = done; setTimeout(done, dur + 250);
+}
+// 手牌補位：每張牌從原本的位置滑到新位置；新摸的牌從上面落下
+function flipHand(S) {
+  const els = [...document.querySelectorAll('#r-hand .t')]; if (!els.length || !S.hand.length) return;
+  const seen = {}, old = {}, cnt = {};
+  S.hand.forEach(h => { seen[h.l] = (seen[h.l] || 0) + 1; old[h.l + '#' + seen[h.l]] = h.r; });
+  let fresh = null;
+  els.forEach(e => {
+    const l = e.getAttribute('aria-label'); cnt[l] = (cnt[l] || 0) + 1;
+    const o = old[l + '#' + cnt[l]], r = e.getBoundingClientRect();
+    if (!o) { if (els.length > S.hand.length) fresh = e; return; }
+    const dx = o.left - r.left; if (Math.abs(dx) < 1) return;
+    const far = Math.abs(dx) > r.width * 1.6;
+    e.animate(far ? [{ transform: `translate(${dx}px,0)` }, { transform: `translate(${dx * .5}px,${-r.height * .35}px)`, offset: .45 }, { transform: 'none' }]
+      : [{ transform: `translate(${dx}px,0)` }, { transform: 'none' }], { duration: far ? 360 : 200, easing: 'ease-in-out' });
+  });
+  if (fresh) { fresh.animate([{ transform: 'translateY(-45%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 230, easing: 'ease-out' }); Snd.play('draw'); }
+}
+// 每局開始：擲骰子，然後四張一組發牌，最後翻開自己的牌
+function checkDeal(V) {
+  const g = V.game; if (g.phase !== 'play') return;
+  const key = (Host.on ? Host.tid : App.S && App.S.tid) + ':' + g.handNo;
+  if (App.dealKey === key) return;
+  App.dealKey = key;
+  const left = (g.dl || 0) - (g.dlMax || 0);
+  if (g.dn !== 0 || left < 900 || reduceMotion()) return;
+  playDeal(V, Math.min(left, 3100), key);
+}
+function playDeal(V, ms, key) {
+  const game = document.querySelector('main.game'), box = game && animLayer('dealbox'); if (!box) return;
+  const f = Math.max(.55, Math.min(1, ms / 3100)), T = x => Math.round(x * f), g = V.game;
+  App.dealing = true; game.classList.add('dealing');
+  const dial = document.querySelector('#r-info .dial'), dr = (dial || game).getBoundingClientRect();
+  const cx = dr.left + dr.width / 2, cy = dr.top + dr.height / 2;
+  const h = hashStr(key), d1 = 1 + h % 6, d2 = 1 + Math.floor(h / 6) % 6;
+  const dice = [0, 1].map(() => { const d = document.createElement('div'); d.className = 'die'; box.appendChild(d); return d; });
+  dice.forEach((d, j) => {
+    const x1 = cx - 20 + j * 40, y1 = cy - dr.height * .5 - 26 + j * 6, x0 = innerWidth * .78 + j * 28, y0 = innerHeight * .82;
+    d.style.left = x1 + 'px'; d.style.top = y1 + 'px'; d.innerHTML = PIPS(1 + j);
+    d.animate([{ transform: `translate(${x0 - x1}px,${y0 - y1}px) rotate(0deg)` }, { transform: `translate(${(x0 - x1) * .45}px,${(y0 - y1) * .45 - 40}px) rotate(${j ? -400 : 420}deg)`, offset: .45 },
+      { transform: `translate(${(x0 - x1) * .12}px,${(y0 - y1) * .12}px) rotate(${j ? -640 : 680}deg)`, offset: .78 }, { transform: `rotate(${j ? -720 : 720}deg)` }],
+      { duration: T(850), easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'both' });
+    d.animate([{ opacity: 1 }, { opacity: 0 }], { delay: T(1500), duration: T(250), fill: 'forwards' });
+  });
+  let n = 0; const iv = setInterval(() => { n++; dice.forEach((d, j) => { d.innerHTML = PIPS(1 + (n * (j ? 5 : 7) + j * 2) % 6); }); }, 70);
+  Snd.play('dice');
+  const lab = document.createElement('div'); lab.className = 'dlab'; lab.style.left = cx + 'px'; lab.style.top = (dr.bottom + 6) + 'px'; box.appendChild(lab);
+  const tm = [];
+  tm.push(setTimeout(() => { clearInterval(iv); dice[0].innerHTML = PIPS(d1); dice[1].innerHTML = PIPS(d2); lab.innerHTML = `擲出 <b>${d1 + d2}</b> 點`; lab.classList.add('on'); }, T(850)));
+  tm.push(setTimeout(() => { lab.innerHTML = '發牌'; }, T(1550)));
+  const me = Math.max(V.mySeat, 0), start = T(1250), step = T(80);
+  const rect = p => { const el = p === 0 ? document.getElementById('r-hand') : document.querySelector(`#r-op${p} .backs`); return el && el.getBoundingClientRect(); };
+  for (let i = 0; i < 16; i++) {
+    const s = (g.dealer + i) % 4, r = Math.floor(i / 4), p = (s - me + 4) % 4, R = rect(p); if (!R || !R.width) continue;
+    const horiz = p % 2 === 0, fr = (r * 4 + 2) / 16;
+    const x = horiz ? R.left + R.width * (p === 2 ? 1 - fr : fr) : R.left + R.width / 2, y = horiz ? R.top + R.height / 2 : R.top + R.height * (p === 1 ? 1 - fr : fr);
+    const el = document.createElement('div'); el.className = 'dgrp' + (horiz ? '' : ' v'); el.innerHTML = '<i></i><i></i><i></i><i></i>';
+    el.style.left = cx + 'px'; el.style.top = cy + 'px'; box.appendChild(el);
+    const sc = p === 0 ? 1.6 : .9, end = `translate(calc(-50% + ${(x - cx).toFixed(1)}px),calc(-50% + ${(y - cy).toFixed(1)}px)) scale(${sc})`;
+    el.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(.8)', opacity: 1, offset: .15 }, { transform: end, opacity: 1 }],
+      { duration: T(320), delay: start + step * i, easing: 'ease-in', fill: 'both' });
+    tm.push(setTimeout(() => Snd.play('deal'), start + step * i + T(300)));
+  }
+  let over = false;
+  const fin = () => {
+    if (over) return; over = true; App.dealStop = null;
+    tm.forEach(clearTimeout); clearInterval(iv); box.remove(); App.dealing = false; game.classList.remove('dealing');
+    document.querySelectorAll('#r-hand .t').forEach((e, i) => e.animate([{ transform: 'scaleX(0)' }, { transform: 'none' }], { duration: 220, delay: i * 22, easing: 'ease-out', fill: 'backwards' }));
+    document.querySelectorAll('.opp .backs, .opp .ml, #r-mtop .ml').forEach(e => e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200 }));
+    checkTurnSound(App.V || V);
+  };
+  App.dealStop = fin;
+  tm.push(setTimeout(fin, start + step * 15 + T(380)));
+}
+// 算分：金幣從付錢的人飛到胡牌的人，名牌上的分數往上跳
+function playScore(V) {
+  const g = V && V.game, R = g && g.result; if (!R || R.kind !== 'win' || reduceMotion()) return;
+  stopScore();
+  const box = animLayer('scorebox'); if (!box) return;
+  const pl = [0, 1, 2, 3].map(s => plateOf(V, s)), w = pl[R.w] && pl[R.w].el; if (!w) { box.remove(); return; }
+  const C = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, r }; };
+  const to = C(w), mid = { x: innerWidth / 2, y: innerHeight * .45 };
+  let idx = 0;
+  [0, 1, 2, 3].forEach(s => {
+    if (!(R.delta[s] < 0) || !pl[s].el) return;
+    const fr = C(pl[s].el), ax = (fr.x + to.x) / 2, ay = (fr.y + to.y) / 2;
+    for (let i = 0; i < 6; i++) {
+      const c = document.createElement('i'); c.className = 'coin'; box.appendChild(c);
+      const mx = ax + (mid.x - ax) * .45 + (i - 2.5) * 12, my = ay + (mid.y - ay) * .45 + (i - 2.5) * 8, dl = 150 + idx * 90 + i * 55;
+      c.animate([{ transform: `translate(${fr.x}px,${fr.y}px) scale(.4)`, opacity: 0 }, { transform: `translate(${fr.x}px,${fr.y}px) scale(1)`, opacity: 1, offset: .1 },
+        { transform: `translate(${mx}px,${my}px) scale(1.2)`, opacity: 1, offset: .55 }, { transform: `translate(${to.x}px,${to.y}px) scale(.6)`, opacity: 1, offset: .96 },
+        { transform: `translate(${to.x}px,${to.y}px) scale(.6)`, opacity: 0 }], { delay: dl, duration: 620, easing: 'ease-in', fill: 'both' });
+      if (i === 5) setTimeout(() => Snd.play('coin'), dl + 600);
+    }
+    idx++;
+  });
+  const cnt = [];
+  [0, 1, 2, 3].forEach(s => {
+    const d = R.delta[s], el = pl[s].el; if (!d || !el) return;
+    const p = pl[s].p, Rr = el.getBoundingClientRect(), big = s === R.w, st = big ? 1050 : 650;
+    const at = p === 0 ? { x: Math.max(70, Rr.left + Rr.width / 2 + 24), y: Rr.top - 26 } : p === 2 ? { x: Rr.left + Rr.width / 2, y: Rr.bottom + 24 } : p === 3 ? { x: Rr.right + 46, y: Rr.top + Rr.height / 2 } : { x: Rr.left - 46, y: Rr.top + Rr.height / 2 };
+    const fl = document.createElement('div'); fl.className = 'sfloat ' + (d > 0 ? 'p' : 'n'); fl.textContent = fmt(d); box.appendChild(fl);
+    const P = (dy, sc) => `translate(-50%,-50%) translate(${at.x}px,${at.y + dy}px) scale(${sc})`;
+    fl.animate([{ transform: P(10, .4), opacity: 0 }, { transform: P(0, big ? 1.3 : 1), opacity: 1, offset: .2 }, { transform: P(-10, big ? 1.2 : .95), opacity: 1, offset: .75 }, { transform: P(-24, big ? 1.2 : .95), opacity: 0 }],
+      { delay: st, duration: 1400, easing: 'ease-out', fill: 'both' });
+    el.animate([{ boxShadow: '0 0 0 0 rgba(255,213,74,0)' }, { boxShadow: big ? '0 0 0 3px #ffd54a,0 0 24px rgba(255,213,74,.9)' : '0 0 0 2px #ff8a7e,0 0 14px rgba(255,138,126,.6)', offset: .3 }, { boxShadow: '0 0 0 0 rgba(255,213,74,0)' }],
+      { delay: st, duration: 1300 });
+    const sc = el.querySelector('.sc'); if (sc) { sc.textContent = fmt(g.scores[s] - d); cnt.push({ sc, from: g.scores[s] - d, to: g.scores[s], st }); }
+  });
+  const t0 = performance.now();
+  const tickF = now => {
+    const t = now - t0;
+    for (const c of cnt) { const q = Math.max(0, Math.min(1, (t - c.st) / 700)), v = Math.round(c.from + (c.to - c.from) * (1 - Math.pow(1 - q, 3))); c.sc.textContent = fmt(v); c.sc.classList.toggle('up', q > 0 && q < 1); }
+    if (t < 1900) App.scoreRaf = requestAnimationFrame(tickF); else App.scoreRaf = 0;
+  };
+  App.scoreRaf = requestAnimationFrame(tickF);
+  App.scoreBox = box; App.scoreCnt = cnt;
+  setTimeout(() => { if (App.scoreBox === box) stopScore(); }, 2400);
+}
+function stopScore() {
+  if (App.scoreRaf) cancelAnimationFrame(App.scoreRaf); App.scoreRaf = 0;
+  if (App.scoreBox) App.scoreBox.remove(); App.scoreBox = null;
+  for (const c of App.scoreCnt || []) { c.sc.textContent = fmt(c.to); c.sc.classList.remove('up'); }
+  App.scoreCnt = [];
+}
+
 /* ================= 特效與胡牌流程 ================= */
 const FXC = { 聽: ['#ffc58a', '#c4511a'], 碰: ['#8fd0ff', '#1d4e89'], 槓: ['#dcb0ff', '#5b2a8c'], 吃: ['#9af3bd', '#17704a'], 胡: ['#ffe27a', '#d2401e'], 自摸: ['#fff3a8', '#c98a0c'], 流局: ['#e3e8eb', '#5b6670'] };
 // 會跳出牌型特效的項目（自摸、花牌、莊家、連莊這類小項目只寫在結算表）
@@ -2339,6 +2840,7 @@ function checkFx(g) {
   for (let i = fresh.length - 1; i >= 0; i--) {
     const e = fresh[i], m = e.m, w = /^(碰|吃)/.test(m) ? m[0] : /^(槓|暗槓|加槓)/.test(m) ? '槓' : m === '聽牌' ? '聽' : null;
     if (!w) continue;
+    Snd.play(w === '聽' ? 'ting' : 'claim');
     fireFx(w, seatName(e.s) + ' ' + (w === '聽' ? '宣告聽牌' : m.startsWith('暗槓') ? '暗槓' : m.startsWith('加槓') ? '加槓' : w));
     // 我打的牌被吃、碰、槓走：在我旁邊跳出三張快捷貼圖
     const me = App.V && App.V.mySeat, ms = g.melds[e.s] || [], lm = ms[ms.length - 1];
@@ -2375,7 +2877,7 @@ function showStk(V, s, id) {
   const img = document.createElement('img');
   img.className = 'stkb'; img.src = STK_IMG[id]; img.alt = seatName(s) + '：' + STK_NAME[id]; img.dataset.s = s;
   img.style.cssText = `left:${Math.round(x)}px;top:${Math.round(y)}px;width:${sz}px;height:${sz}px`;
-  lay.appendChild(img); setTimeout(() => img.remove(), 3200);
+  lay.appendChild(img); setTimeout(() => img.remove(), 3200); Snd.play('pop');
 }
 function showQuick() { App.quickUntil = Date.now() + 6000; renderQuick(); clearTimeout(App.quickT); App.quickT = setTimeout(renderQuick, 6100); }
 function renderQuick() {
@@ -2418,8 +2920,19 @@ function recordStats(V) {
   const names = win ? R.items.map(([n]) => n) : [];
   const items = won ? names.filter(n => COLLECT.includes(n)).concat(names.filter(n => !COLLECT.includes(n))) : [];
   if (won && allDt) { items.push('莊家'); if (R.streak) items.push(`連${CNUM(R.streak)}拉${CNUM(R.streak)}`); }
+  // 最近戰績：每一局都記（有電腦的局也記，另外標示）
+  const nm = s => seatName(s), shown = win ? R.tai + (allDt ? R.dealerTai : 0) : 0, mine = win && R.pays.find(x => x.p === me);
+  const top = win ? R.items.slice().sort((a, b) => b[1] - a[1]).slice(0, 2).map(([n]) => n).join('、') : '';
+  let r, d;
+  if (!win) { r = 'lj'; d = '流局，莊家連莊'; }
+  else if (won) { r = R.self ? 'zm' : 'hu'; d = (R.self ? '' : `${nm(R.from)} 放槍 · `) + `${top} · ${shown} 台`; }
+  else if (R.from === me) { r = 'fq'; d = `放給 ${nm(R.w)} · ${top} · ${mine ? mine.tai : shown} 台`; }
+  else if (R.self) { r = 'bz'; d = `${nm(R.w)} ${winWord(R)} · ${mine ? mine.tai : shown} 台`; }
+  else { r = 'ns'; d = `${nm(R.w)} 胡 ${nm(R.from)}`; }
+  const rec = { at: Date.now(), room: window.mjAccount.room, hn: g.handNo, r, d, s: R.delta[me] || 0, b: g.seats.some(x => !x || x.bot) ? 1 : 0 };
+  if (win) rec.h = { m: (R.melds || []).map(m => m.tiles), c: R.conc || [], w: R.tile, f: R.flowers || [] };
   window.mjStats.record({ key, rank: g.seats.every(x => x && !x.bot), won, dealin: win && R.from === me,
-    tai: won ? R.tai + (allDt ? R.dealerTai : 0) : 0, items, pats: won ? names.filter(n => COLLECT.includes(n)) : [] });
+    tai: won ? shown : 0, items, pats: won ? names.filter(n => COLLECT.includes(n)) : [], rec });
 }
 const winWord = R => R.kind !== 'win' ? '流局' : R.special === 'bax' ? '八仙過海' : R.special === 'qqy' ? '七搶一' : R.self ? '自摸' : '胡';
 // 胡牌流程：① 胡／自摸 → ② 牌型特效（一個接一個）→ ③ 結算表。中途加入或重新整理的人直接看結算表。
@@ -2427,14 +2940,19 @@ function flowHTML(V) {
   const g = V.game, R = g.result, key = g.handNo;
   if (!App.flow || App.flow.key !== key) {
     const pats = R.kind === 'win' ? R.items.filter(([n]) => PATS.includes(n)).slice(0, 3) : [];
-    App.flow = { key, t0: Date.now(), play: App.playSeen === key, pats, skip: false };
+    App.flow = { key, t0: Date.now(), play: App.playSeen === key, pats, skip: false, sc: R.kind === 'win' && !reduceMotion() };
+    if (App.flow.play) Snd.play(R.kind === 'win' ? 'hu' : 'lj');
   }
   const F = App.flow;
-  if (!F.play || F.skip) return '';
-  const T1 = R.kind === 'win' ? 1600 : 1300, TP = 1800, el = Date.now() - F.t0;
+  if (!F.play || F.skip) { if (F.skip && App.scoreBox) stopScore(); return ''; }
+  const T1 = R.kind === 'win' ? 1600 : 1300, TP = 1800, TS = 2300, el = Date.now() - F.t0, TE = T1 + F.pats.length * TP;
   let html = '', next = 0;
   if (el < T1) { html = huStage(V); next = T1 - el; }
-  else { const i = Math.floor((el - T1) / TP); if (i < F.pats.length) { html = patStage(V, F.pats[i], i); next = T1 + (i + 1) * TP - el; } }
+  else if (el < TE) { const i = Math.floor((el - T1) / TP); html = patStage(V, F.pats[i], i); next = T1 + (i + 1) * TP - el; }
+  else if (F.sc && el < TE + TS) { // 算分動畫：看得到牌桌，金幣飛向胡牌的人
+    if (!F.scored) { F.scored = true; setTimeout(() => playScore(App.V), 30); }
+    html = '<div class="ov fxov s3" data-a="skipfx"><span class="fxskip">點一下跳過</span></div>'; next = TE + TS - el;
+  } else if (App.scoreBox) stopScore();
   clearTimeout(App.flowT);
   if (html) App.flowT = setTimeout(renderSoon, next + 30);
   return html;
@@ -2453,6 +2971,7 @@ function patStage(V, [name, tai], i) {
 }
 function overlayHTML(V) {
   if (App.ov === 'nick') return `<div class="ov">${nickHTML()}</div>`;
+  if (App.ov === 'custom') return `<div class="ov">${customHTML()}</div>`;
   if (App.ov === 'rules') return `<div class="ov">${rulesHTML()}</div>`;
   if (App.ov === 'menu') return `<div class="ov">${menuHTML(V)}</div>`;
   if (App.ov === 'stk') return stkTray();
@@ -2518,30 +3037,75 @@ function menuHTML(V) {
   if (g && me >= 0 && g.phase === 'play') items.push(`<button class="btn ghost" data-a="auto" data-on="${g.auto[me] ? 0 : 1}">${g.auto[me] ? '取消托管' : '托管（讓電腦代打）'}</button>`);
   if (App.local) items.push('<button class="btn ghost" data-a="quitlocal">離開單機練習</button>');
   else if (V && V.isHost) items.push('<button class="btn ghost" data-a="dissolve">解散牌桌</button>');
-  return `<div class="card menu"><div class="mh"><h3>選單</h3><button class="xb" data-a="close" aria-label="關閉選單">×</button></div>${items.join('')}</div>`;
+  const snd = `<button class="sndt${Snd.on ? ' on' : ''}" data-a="sound" aria-pressed="${Snd.on}">${Snd.on ? ICON_SPK : ICON_MUTE.replace('#2a1406', 'currentColor')}<span>音效<small>${Snd.on ? '開' : '關'}</small></span></button>`;
+  return `<div class="card menu"><div class="mh"><h3>選單</h3>${snd}<button class="xb" data-a="close" aria-label="關閉選單">×</button></div>${items.join('')}</div>`;
+}
+// 規則頁：牌型圖解（每個牌型附一手範例，金色底線標出重點）、台數總表、基本規則、計分方式
+const RULE_PATS = [
+  ['平胡', 2, '五組都是順子，眼不能是字牌；不能有花、不能自摸，而且要聽兩面。', [[0, 1, 2], [3, 4, 5], [10, 11, 12], [14, 15, 16], [22, 22], [19, 20, 21]], [0, 1, 2, 3, 5], '全是順子', { win: [5, 0] }],
+  ['碰碰胡', 4, '五組都是刻子（三張一樣），再加一對眼。', [[4, 4, 4], [31, 31, 31], [16, 16, 16], [19, 19, 19], [24, 24, 24], [8, 8]], [0, 1, 2, 3, 4], '全是刻子'],
+  ['混一色', 4, '只有一種花色，再加上字牌（這手是筒子＋東、中、發）。', [[9, 10, 11], [12, 13, 14], [15, 16, 17], [27, 27, 27], [31, 31, 31], [32, 32]], [3, 4, 5], '字牌'],
+  ['清一色', 8, '整手都是同一種花色，沒有字牌（這手全是萬子）。', [[0, 1, 2], [3, 4, 5], [6, 7, 8], [1, 2, 3], [4, 5, 6], [8, 8]], [0, 1, 2, 3, 4, 5], '全是萬'],
+  ['字一色', 16, '整手都是字牌（東、南、西、北、中、發、白）。', [[27, 27, 27], [28, 28, 28], [29, 29, 29], [31, 31, 31], [32, 32, 32], [33, 33]], [0, 1, 2, 3, 4, 5], '全是字牌'],
+  ['小三元', 4, '中、發、白其中兩種是刻子，第三種當眼。', [[31, 31, 31], [32, 32, 32], [33, 33], [0, 1, 2], [21, 22, 23], [15, 16, 17]], [0, 1, 2], '中發白'],
+  ['大三元', 8, '中、發、白三種都是刻子。', [[31, 31, 31], [32, 32, 32], [33, 33, 33], [0, 1, 2], [21, 22, 23], [17, 17]], [0, 1, 2], '中發白'],
+  ['小四喜', 8, '東、南、西、北其中三種是刻子，第四種當眼。', [[27, 27, 27], [28, 28, 28], [29, 29, 29], [30, 30], [0, 1, 2], [12, 13, 14]], [0, 1, 2, 3], '東南西北'],
+  ['大四喜', 16, '東、南、西、北四種都是刻子。', [[27, 27, 27], [28, 28, 28], [29, 29, 29], [30, 30, 30], [24, 25, 26], [4, 4]], [0, 1, 2, 3], '東南西北'],
+  ['三暗刻', 2, '有三組刻子是自己摸進來的（不是碰別人的）。', [[1, 1, 1], [14, 14, 14], [25, 25, 25], [3, 4, 5], [18, 19, 20], [33, 33]], [0, 1, 2], '自己摸的刻子'],
+  ['四暗刻', 5, '有四組刻子是自己摸進來的。', [[1, 1, 1], [14, 14, 14], [25, 25, 25], [31, 31, 31], [18, 19, 20], [9, 9]], [0, 1, 2, 3], '自己摸的刻子'],
+  ['五暗刻', 8, '五組刻子全是自己摸進來的（最後一張要自摸）。', [[1, 1, 1], [14, 14, 14], [25, 25, 25], [31, 31, 31], [27, 27, 27], [9, 9]], [0, 1, 2, 3, 4], '自己摸的刻子'],
+  ['全求人', 2, '五組都是吃、碰來的，手上只剩一張單吊，胡別人打的牌。最後那張如果是自己摸到的，叫「半求人」，1 台。', [[0, 1, 2], [13, 13, 13], [24, 25, 26], [27, 27, 27], [19, 20, 21], [31, 31]], [0, 1, 2, 3, 4], '吃碰來的', { win: [5, 1] }],
+  ['獨聽', 1, '只聽一張牌：邊張（一二等三）、中洞（四六等五）、單吊（等一對眼）。', [[0, 1, 2], [12, 13, 14], [27, 27]], [], '', { wins: [[0, 2], [1, 1], [2, 1]], caps: ['邊張', '中洞', '單吊'] }],
+  ['三元牌、風牌刻子', 1, '中、發、白的刻子每組 1 台；圈風、門風（自己座位的風）的刻子也各 1 台。', [[31, 31, 31], [32, 32, 32], [28, 28, 28]], [0, 1, 2], '每組 1 台', { caps: ['紅中', '青發', '門風（坐南）'] }],
+  ['花牌', 1, '花一摸到就亮出來、補一張牌。自己座位的正花每張 1 台（東：春、梅；南：夏、蘭；西：秋、竹；北：冬、菊）；春夏秋冬或梅蘭竹菊集齊一整組 2 台。', [[34, 35, 36, 37], [38, 39, 40, 41]], [0, 1], '集齊一組 2 台', { caps: ['春夏秋冬', '梅蘭竹菊'] }],
+  ['八仙過海', 8, '自己湊齊八張花，直接胡牌。', [[34, 35, 36, 37, 38, 39, 40, 41]], [0], '八張花'],
+  ['七搶一', 8, '手上已經有七張花，別人摸到第八張花時，直接搶來胡。', [[34, 35, 36, 37, 38, 39, 40]], [0], '七張花'],
+];
+const RULE_TIMING = [['門清', '1', '沒有吃、碰、明槓過'], ['自摸', '1', '胡自己摸到的牌'], ['門清自摸', '3', '門清又自摸，合計 3 台'], ['報聽', '1', '按「宣告聽牌」後胡牌'],
+  ['槓上開花', '1', '槓完補牌剛好自摸'], ['海底撈月', '1', '摸最後一張牌自摸'], ['河底撈魚', '1', '胡最後一張打出的牌'], ['搶槓', '1', '胡別人加槓的那張牌'],
+  ['天胡', '24', '莊家開門就胡'], ['地胡', '16', '閒家第一次摸牌就自摸'], ['人胡', '16', '閒家第一輪就胡別人的牌'], ['莊家', '1', '莊家胡牌，或莊家付錢時另加'], ['連莊', '每連 2', '連一拉一、連二拉二…']];
+function rulePat([name, tai, desc, gs, key, kl, o = {}]) {
+  const wins = o.wins || (o.win ? [o.win] : []);
+  const gh = gs.map((g, i) => `<span class="rg${key.includes(i) ? ' k' : ''}"><span class="rgt">${g.map((k, j) => tile(k, wins.some(([a, b]) => a === i && b === j) ? 'win' : '')).join('')}</span>${o.caps ? `<small>${o.caps[i]}</small>` : ''}</span>`).join('');
+  return `<div class="rp"><div class="rph"><b>${name}</b><em>${tai} 台</em>${kl ? `<small class="rkl"><i></i>${kl}</small>` : ''}</div><p>${desc}</p><div class="rtiles lay">${gh}</div></div>`;
 }
 function rulesHTML() {
+  const tab = App.rulesTab || 'pat';
   const TAI = [['莊家', '1'], ['連莊（連 N 拉 N）', '每連 2'], ['門清／自摸', '各 1'], ['門清自摸', '3'], ['圈風刻、門風刻', '各 1'], ['中、發、白刻', '各 1'],
     ['正花', '每張 1'], ['春夏秋冬／梅蘭竹菊集齊', '2'], ['報聽（宣告聽牌）', '1'], ['獨聽（邊張、中洞、單吊）', '1'], ['半求人', '1'], ['全求人', '2'],
     ['海底撈月、河底撈魚', '1'], ['槓上開花、搶槓', '1'], ['平胡', '2'], ['三暗刻', '2'], ['四暗刻', '5'], ['五暗刻', '8'], ['碰碰胡', '4'],
     ['混一色', '4'], ['清一色', '8'], ['字一色', '16'], ['小三元', '4'], ['大三元', '8'], ['小四喜', '8'], ['大四喜', '16'],
     ['八仙過海、七搶一', '8'], ['地胡、人胡', '16'], ['天胡', '24']];
-  return `<div class="card rules"><h2>規則與台數</h2>
-    <h3>基本規則</h3><ul>
-    <li>144 張牌（含 8 張花）。每人 16 張，莊家先摸第 17 張；花牌亮出並從牌尾補牌。</li>
+  const cfg = (App.V && App.V.game && App.V.game.cfg) || (App.V && App.V.lobby && App.V.lobby.cfg) || DEF_CFG, base = cfg.base || 50, per = cfg.per || 20, secs = Math.round(okThink(cfg.turnMs) / 1000);
+  let body;
+  if (tab === 'pat') body = `<div class="rgrid">${RULE_PATS.map(rulePat).join('')}</div>
+    <h3>看時機的台數</h3><div class="rtm">${RULE_TIMING.map(([n, t, d]) => `<div><b>${n}</b><em>${t} 台</em><span>${d}</span></div>`).join('')}</div>`;
+  else if (tab === 'tai') body = `<table class="rtai">${TAI.map(([n, t]) => `<tr><td>${n}</td><td class="n">${t} 台</td></tr>`).join('')}</table><p class="rsm">各地台數規定略有不同，這裡採常見的台灣十六張算法。</p>`;
+  else if (tab === 'basic') body = `<ul class="rul">
+    <li>144 張牌（含 8 張花）。每局先擲骰子，每人 16 張，莊家先摸第 17 張；花牌亮出並從牌尾補牌。</li>
     <li>胡牌需要 5 組（順子或刻子）加 1 對眼。可以吃（只限上家）、碰、槓。</li>
     <li>優先順序：胡 ＞ 碰、槓 ＞ 吃。兩人同時胡，由放槍者的下家優先（截胡）。可搶槓胡。</li>
     <li>牌牆剩 16 張時流局，莊家連莊；莊家胡牌也連莊，否則換下家坐莊。</li>
-    <li>出牌限時 12 秒、吃碰胡限時 12 秒；連續逾時兩次會自動托管，點「取消托管」即可回來。</li>
+    <li>思考時間由房主在大廳設定（6、12 或 18 秒），出牌和吃碰胡都一樣；這桌是 ${secs} 秒。連續逾時兩次會自動托管，點「取消托管」即可回來。</li>
     <li>宣告聽牌：聽牌時出牌可以按「宣告聽牌」。宣告後手牌不能再改，只能打出摸到的牌：可以自摸、胡別人打的牌或加槓，不能吃、碰、明槓或暗槓；摸到用不到的牌會自動打出。宣告聽牌（報聽）胡牌時加 1 台。</li>
-    <li>貼圖：按上方「貼圖」可以傳貼圖給大家看；你打的牌被吃、碰、槓走時，旁邊會跳出三張快捷貼圖。</li></ul>
-    <h3>計分</h3><ul><li>放槍：放槍者付「底＋台數×每台」。自摸：三家各付一份。</li><li>莊家胡或莊家付款時，另加莊家 1 台與連莊台。</li></ul>
-    <h3>台數表</h3><table>${TAI.map(([n, t]) => `<tr><td>${n}</td><td class="n">${t} 台</td></tr>`).join('')}</table>
-    <p class="small">各地台數規定略有不同，這裡採常見的台灣十六張算法。</p>
-    <div class="foot"><button class="btn" data-a="close">知道了</button></div></div>`;
+    <li>大廳裡朋友入座後按「準備」，房主會看到大家的準備燈；房主也可以不等，直接開始。</li>
+    <li>貼圖：按右上角笑臉可以傳貼圖；你打的牌被吃、碰、槓走時，旁邊會跳出三張快捷貼圖。音效可以在齒輪選單裡開關。</li></ul>`;
+  else body = `<ul class="rul"><li><b>放槍</b>：放槍的人付「底＋台數×每台」。</li><li><b>自摸</b>：其他三家各付一份「底＋台數×每台」。</li>
+    <li><b>莊家</b>：莊家胡牌，或莊家付錢時，那一份另加莊家 1 台；連莊時再加連莊台（連 N 拉 N＝2N 台）。</li></ul>
+    <div class="rex"><b>例子（這桌：底 ${base}、每台 ${per}）</b>
+    <p>胡 4 台、別人放槍：放槍的人付 ${base} ＋ 4 × ${per} ＝ <em>${base + 4 * per}</em>。</p>
+    <p>自摸 4 台：三家各付 ${base + 4 * per}，一共收 <em>${(base + 4 * per) * 3}</em>。</p>
+    <p>莊家連一自摸 4 台：每家多算莊家 1 台＋連莊 2 台，各付 ${base} ＋ 7 × ${per} ＝ <em>${base + 7 * per}</em>。</p></div>
+    <p class="rsm">流局不算分，莊家連莊。</p>`;
+  const tabs = [['pat', '牌型圖解'], ['tai', '台數總表'], ['basic', '基本規則'], ['pay', '計分方式']].map(([k, n]) => `<button class="rtab${k === tab ? ' on' : ''}" data-a="rtab" data-t="${k}" aria-pressed="${k === tab}">${n}</button>`).join('');
+  return `<div class="rules2" role="dialog" aria-label="規則與台數"><div class="rhd"><div class="rtt"><h2>規則與台數</h2><button class="xb" data-a="close" aria-label="關閉">×</button></div><div class="rtabs">${tabs}</div></div><div class="rbody">${body}</div></div>`;
 }
 function updateTimers() {
   const left = App.dlAt - Date.now(), f = Math.max(0, Math.min(1, left / App.dlMax));
+  const V = App.V, o = V && V.priv && V.priv.opts, g = V && V.game;
+  if (g && g.phase === 'play' && o && (o.turn || o.claim) && !g.auto[V.mySeat] && App.dlMax >= 4000 && !myPending(V)) {
+    const sec = Math.ceil(left / 1000); if (sec >= 1 && sec <= 3 && sec !== App.tickSec) { App.tickSec = sec; Snd.play('tick'); }
+  } else App.tickSec = 0;
   for (const el of document.querySelectorAll('.timer')) { el.querySelector('i').style.width = (f * 100).toFixed(1) + '%'; el.classList.toggle('low', left < 4000); }
   for (const el of document.querySelectorAll('[data-secs]')) el.textContent = Math.max(0, Math.ceil(left / 1000));
 }
@@ -2563,7 +3127,7 @@ function toast(msg) {
 function currentTiles() { const V = App.V; return V && V.priv ? handTiles(V.priv).tiles : []; }
 function onClick(e) {
   const b = e.target.closest('[data-a]');
-  if (!b) { if (e.target.classList && e.target.classList.contains('ov') && (App.ov === 'rules' || App.ov === 'menu' || App.ov === 'stk')) { App.ov = null; render(); } return; }
+  if (!b) { if (e.target.classList && e.target.classList.contains('ov') && (App.ov === 'rules' || App.ov === 'menu' || App.ov === 'stk' || App.ov === 'custom')) { App.ov = null; render(); } return; }
   if (b.disabled) return;
   const a = b.dataset.a, d = b.dataset, V = App.V;
   switch (a) {
@@ -2575,7 +3139,11 @@ function onClick(e) {
     case 'stand': send({ t: 'stand' }); break;
     case 'bot': if (Host.on && !Host.lobby.seats[+d.s]) { Host.lobby.seats[+d.s] = { bot: true }; Host.commit(); } break;
     case 'unseat': if (Host.on && !Host.G) { Host.lobby.seats[+d.s] = null; Host.commit(); } break;
-    case 'cfg': if (Host.on && !Host.G) { const c = { ...Host.lobby.cfg }; if (d.b) { c.base = +d.b; c.per = +d.p; } if (d.r) c.rounds = +d.r; Host.lobby.cfg = c; Host.commit(); } break;
+    case 'cfg': if (Host.on && !Host.G) { const c = { ...Host.lobby.cfg }; if (d.b) { c.base = +d.b; c.per = +d.p; } if (d.r) c.rounds = +d.r; if (d.t) c.turnMs = c.claimMs = okThink(+d.t); Host.lobby.cfg = c; Host.commit(); } break;
+    case 'cfgcustom': if (Host.on && !Host.G) { App.ov = 'custom'; render(); setTimeout(() => { const el = document.getElementById('cb-base'); if (el && matchMedia('(pointer:fine)').matches) el.focus(); }, 50); } break;
+    case 'cfgcustom!': saveCustom(); break;
+    case 'lready': send({ t: 'lready', on: d.on === '1' }); break;
+    case 'copyroom': if (window.mjAccount) { const code = window.mjAccount.room; Promise.resolve().then(() => navigator.clipboard.writeText(code)).then(() => toast('已複製房號 ' + code), () => toast('房號是 ' + code)); } break;
     case 'start': if (Host.on) startMatch(); break;
     case 'tile': {
       if (myPending(App.V)) return;
@@ -2597,7 +3165,9 @@ function onClick(e) {
     case 'auto': App.ov = null; send({ t: 'auto', on: d.on === '1' }); break;
     case 'ready': send({ t: 'ready' }); break;
     case 'menu': App.ov = 'menu'; render(); break;
+    case 'sound': Snd.set(!Snd.on); render(); if (Snd.on) setTimeout(() => Snd.play('turn'), 120); break;
     case 'rules': App.ov = 'rules'; render(); break;
+    case 'rtab': App.rulesTab = d.t; render(); { const rb = document.querySelector('.rules2 .rbody'); if (rb) rb.scrollTop = 0; } break;
     case 'close': App.ov = null; render(); break;
     case 'hideres': App.hideRes = V.game.handNo; render(); break;
     case 'showres': App.hideRes = -1; render(); break;
@@ -2629,6 +3199,7 @@ function onClick(e) {
 document.addEventListener('click', onClick);
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target && e.target.id === 'nick-in') { saveNick(); return; }
+  if (e.key === 'Enter' && e.target && /^cb-/.test(e.target.id || '')) { saveCustom(); return; }
   if (e.key === 'Escape' && App.ov && !(App.ov === 'nick' && needNick())) { App.ov = null; render(); }
 });
 setInterval(updateTimers, 250);
@@ -2704,7 +3275,8 @@ async function boot() {
   }
   render();
 }
-window.__mj = { App, Host, renderSoon, fireFx, showQuick }; // 測試用：讓自動化測試能調整單機節奏
+window.mjTile = tile; // 個人資料頁畫牌用
+window.__mj = { App, Host, renderSoon, fireFx, showQuick, Snd, playScore }; // 測試用：讓自動化測試能調整單機節奏
 boot();
 }
 
