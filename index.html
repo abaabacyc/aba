@@ -516,7 +516,7 @@ async function loadMe(u) {
 async function afterLogin(u) {
   await loadMe(u);
   if (wantRoom) { const c = wantRoom; wantRoom = null; return joinRoom(c); }
-  V.rooms();
+  V.rooms('', gateMsg());
 }
 async function joinRoom(code) {
   if (!ROOM_RE.test(code)) return V.rooms('房號是 6 位數字。');
@@ -541,7 +541,10 @@ async function enterRoom(code, fresh) {
   hideGate();
   await startAdapter(fresh);
 }
-const leave = () => { location.href = location.pathname; };
+// 回到登入後的選房間畫面（可以帶一句說明，例如「牌桌已經解散」）
+const leave = msg => { try { if (msg) sessionStorage.setItem('mj-gate-msg', msg); } catch (e) { /* ignore */ } location.href = location.pathname; };
+window.mjToGate = leave;
+const gateMsg = () => { try { const m = sessionStorage.getItem('mj-gate-msg') || ''; sessionStorage.removeItem('mj-gate-msg'); return m; } catch (e) { return ''; } };
 
 async function doLogin(f) {
   const id = f.id.value.trim().toLowerCase(), pw = f.pw.value;
@@ -595,7 +598,7 @@ function wireGate() {
     if (g === 'login' || g === 'register' || g === 'forgot') V[g]();
     else if (g === 'create') { busy = true; b.disabled = true; b.textContent = '建立中…'; try { await createRoom(); } finally { busy = false; } }
     else if (g === 'logout') { try { await signOut(auth); } catch (x) { /* ignore */ } leave(); }
-    else if (g === 'local') { hideGate(); window.mjBackendError = '你選擇了單機練習。想和朋友線上對戰，請重新整理頁面並登入。'; finish(); }
+    else if (g === 'local') { hideGate(); window.mjLocalOnly = true; finish(); } // 直接開始單機練習
   });
 }
 
@@ -708,7 +711,7 @@ async function startAdapter(fresh) {
   window.mjAccount = {
     room: ROOM, user: ME.user, fresh: !!fresh,
     link: location.origin + location.pathname + '?room=' + ROOM,
-    leaveRoom: leave,
+    leaveRoom: msg => leave(msg),
     async logout() { try { await signOut(auth); } catch (e) { /* ignore */ } leave(); },
   };
   finish();
@@ -721,7 +724,7 @@ try {
   wireGate();
   const u = await new Promise((resolve, reject) => { const stop = onAuthStateChanged(auth, x => { stop(); resolve(x); }, reject); });
   if (u && !u.isAnonymous) await afterLogin(u);
-  else V.login('', wantRoom ? `登入後會直接進入房號 ${wantRoom}。` : '');
+  else V.login('', wantRoom ? `登入後會直接進入房號 ${wantRoom}。` : gateMsg());
 } catch (e) { fail(e); }
 
 </script>
@@ -1242,7 +1245,7 @@ const MJ = window.MJ;
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const DEF_CFG = { base: 50, per: 20, rounds: 1, claimMs: 6000, turnMs: 6000, botMs: 850, nextMs: 30000 };
+const DEF_CFG = { base: 50, per: 20, rounds: 1, claimMs: 12000, turnMs: 12000, botMs: 850, nextMs: 30000 };
 const newTid = () => Math.random().toString(36).slice(2, 10);
 const CLAIMS = ['discard', 'tsumo', 'akong', 'jkong', 'hu', 'pong', 'kong', 'chi', 'pass'];
 const PRESETS = [[30, 10], [50, 20], [100, 20], [300, 100]];
@@ -1770,6 +1773,10 @@ async function fetchState() {
 
 async function createTable() {
   if (App.canWrite === false) return;
+  App.creating = true;
+  try { await createTable0(); } finally { App.creating = false; }
+}
+async function createTable0() {
   if (!(await lease())) { toast('有人正在開桌，請稍候幾秒再試'); return; }
   try { const d = await stateRef().get(); if (d.exists) { App.S = d.data(); await netView(); render(); return; } } catch (e) { /* proceed */ }
   Host.start({ seats: [{ uid: App.uid }, null, null, null], cfg: { ...DEF_CFG } }, null, 0, newTid());
@@ -1777,8 +1784,10 @@ async function createTable() {
 }
 async function dissolve() {
   App.ov = null;
+  if (window.mjAccount) App.leaving = true; // 自己解散的：等刪完再帶自己的說明回選房間畫面
   Host.stop();
   try { await stateRef().delete(); await saveRef().delete(); } catch (e) { /* ignore */ }
+  if (window.mjAccount) { App.leaving = true; window.mjAccount.leaveRoom('牌桌已經解散了。可以建立新房間，或輸入房號加入其他房間。'); return; }
   App.S = null; App.V = { screen: 'start' }; render();
 }
 function startLocal() {
@@ -1788,6 +1797,7 @@ function startLocal() {
   Host.start({ seats, cfg: G.cfg }, G, 0); Host.commit();
 }
 async function quitLocal() {
+  if (window.mjToGate) { Host.stop(); window.mjToGate(); return; }
   Host.stop(); App.local = false; App.ov = null;
   if (App.net) { await netView(); if (App.S && App.S.hostId === App.uid) tryRestore(App.S); } else App.V = { screen: 'start' };
   render();
@@ -1872,6 +1882,12 @@ function setPart(id, html, cls) {
 function render() {
   rq = false;
   const V = App.V || { screen: 'start' };
+  if (App.S) App.hadTable = true;
+  if (window.mjAccount && V.screen === 'start' && App.loaded && !App.local && !Host.on && !App.creating && !App.leaving) {
+    App.leaving = true;
+    window.mjAccount.leaveRoom(App.hadTable ? '房主已經解散這個房間的牌桌了。可以建立新房間，或輸入其他房號。' : `房號 ${window.mjAccount.room} 目前沒有牌桌。可以建立新房間，或輸入其他房號。`);
+    return;
+  }
   const app = $('#app');
   if (V.screen === 'game' && V.game.phase !== 'over') {
     if (App.shell !== 'game') { app.innerHTML = GAME_SHELL; App.shell = 'game'; for (const k in cache) delete cache[k]; }
@@ -2279,7 +2295,7 @@ function overHTML(V) {
   const btns = V.isHost ? `<button class="btn red" data-a="again">再來一將</button><button class="btn ghost" data-a="${App.local ? 'quitlocal' : 'tolobby'}">${App.local ? '離開單機' : '回大廳'}</button>` : '<p class="small">等待房主決定再來一將或回大廳。</p>';
   return `<main class="lobby"><h1>整將結束</h1><section class="panel"><h3>${esc(seatName(order[0]))} 贏最多</h3>
     <table class="pay"><thead><tr><th>名次</th><th>玩家</th><th class="n">總分</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="foot">${btns}</div></section></main>`;
+    <div class="foot">${btns}${window.mjAccount && !App.local ? '<button class="btn ghost" data-a="leaveroom!">離開房間</button>' : ''}</div></section></main>`;
 }
 function menuHTML(V) {
   const g = V && V.game, me = V ? V.mySeat : -1, items = [];
@@ -2318,7 +2334,7 @@ function rulesHTML() {
     <li>胡牌需要 5 組（順子或刻子）加 1 對眼。可以吃（只限上家）、碰、槓。</li>
     <li>優先順序：胡 ＞ 碰、槓 ＞ 吃。兩人同時胡，由放槍者的下家優先（截胡）。可搶槓胡。</li>
     <li>牌牆剩 16 張時流局，莊家連莊；莊家胡牌也連莊，否則換下家坐莊。</li>
-    <li>出牌限時 6 秒、吃碰胡限時 6 秒；連續逾時兩次會自動托管，點「取消托管」即可回來。</li>
+    <li>出牌限時 12 秒、吃碰胡限時 12 秒；連續逾時兩次會自動托管，點「取消托管」即可回來。</li>
     <li>宣告聽牌：聽牌時出牌可以按「宣告聽牌」。宣告後手牌不能再改，只能打出摸到的牌：可以自摸、胡別人打的牌或加槓，不能吃、碰、明槓或暗槓；摸到用不到的牌會自動打出。宣告聽牌（報聽）胡牌時加 1 台。</li>
     <li>貼圖：按上方「貼圖」可以傳貼圖給大家看；你打的牌被吃、碰、槓走時，旁邊會跳出三張快捷貼圖。</li></ul>
     <h3>計分</h3><ul><li>放槍：放槍者付「底＋台數×每台」。自摸：三家各付一份。</li><li>莊家胡或莊家付款時，另加莊家 1 台與連莊台。</li></ul>
@@ -2445,6 +2461,7 @@ async function boot() {
   App.db = db; App.user = user; App.room = room;
   App.uid = user ? await user.id() : null;
   App.booted = true;
+  if (window.mjLocalOnly) { App.net = false; startLocal(); return; }
   if (!db || !App.uid) { App.net = false; if (window.mjBackend && !window.mjBackendError) window.mjBackendError = '連不上線上服務，請確認網路後重新整理。'; if (!App.local) App.V = { screen: 'start' }; render(); return; }
   if (needNick()) App.ov = 'nick';
   window.addEventListener('mj-names', () => { if (App.V) refreshNames(App.V); });
