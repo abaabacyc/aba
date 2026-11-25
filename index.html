@@ -230,6 +230,9 @@ table.pay{width:100%;border-collapse:collapse;font-size:15px}
 .rules td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .menu{width:min(360px,100%)}
 .menu .btn{width:100%;justify-content:flex-start}
+.menu .mh{display:flex;align-items:center;justify-content:space-between;margin:-6px -8px -2px 0}
+.xb{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--ink);font-size:30px;line-height:1;display:grid;place-items:center}
+.xb:hover{background:var(--line)}
 .nick{width:100%;min-height:48px;font:500 18px/1.2 var(--sans);padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--ink)}
 .nick:focus-visible{outline:3px solid #ffd54a;outline-offset:1px}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1d1a14;color:#fbf7ec;padding:10px 16px;border-radius:12px;z-index:30;font-size:15px;max-width:90vw;box-shadow:0 8px 20px rgba(0,0,0,.35)}
@@ -346,6 +349,36 @@ table.pay{width:100%;border-collapse:collapse;font-size:15px}
 .roombox{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 16px;border-radius:99px;background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1.5px rgba(255,213,74,.5)}
 .roombox span{font-size:14px;color:var(--on-dim)}.roombox b{font:900 24px/1 var(--serif);letter-spacing:.08em;color:#ffd54a}
 
+/* ---------- 圖示列、排行榜、個人資料 ---------- */
+.gicons,.licons{display:flex;gap:8px;align-self:flex-end;order:-1;margin-bottom:-10px}
+.gate .gicons~h1,.gate h1{margin-top:0}
+#sheet{z-index:50}
+.sheetc{width:min(560px,100%)}
+.sheetc .mh{display:flex;align-items:center;justify-content:space-between;margin:-6px -8px -2px 0}
+.tabs.t3{grid-template-columns:repeat(3,1fr)}
+.myrk{margin:0;font-size:15px}.myrk b{color:var(--red);font-size:18px}
+.rk{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rk li{display:grid;grid-template-columns:2.2em 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-radius:10px}
+.rk li:nth-child(odd){background:var(--line)}
+.rk li.me{box-shadow:inset 0 0 0 2px #d6a000;background:rgba(255,213,74,.18)}
+.rk .no{font:900 18px/1 var(--serif);text-align:center;color:var(--muted)}
+.rk li:nth-child(1) .no{color:#c99700}.rk li:nth-child(2) .no{color:#8a96a0}.rk li:nth-child(3) .no{color:#b06a2a}
+.rk .nm{display:grid;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk .nm small{font-weight:500;font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.rk b{font:900 18px/1 var(--serif);font-variant-numeric:tabular-nums}
+.pname{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pname span{color:var(--muted);font-size:14px}.pname b{font-size:20px}.pname small{color:var(--muted)}
+.renm{display:grid;gap:8px}
+.stg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stc{display:grid;gap:2px;padding:10px 12px;border-radius:12px;background:var(--line)}
+.stc span{font-size:13px;color:var(--muted)}.stc b{font:900 24px/1.1 var(--serif)}.stc small{font-size:12px;color:var(--muted)}
+.stc.wide b{font-size:22px}
+.dexh{font-size:17px}.dexh small{font:500 14px var(--sans);color:var(--muted);margin-left:6px}
+.dex{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}
+.dex span{display:flex;align-items:center;justify-content:center;gap:4px;min-height:40px;padding:4px 6px;border-radius:10px;border:1.5px dashed var(--line);color:var(--muted);font-size:14px;text-align:center}
+.dex span.got{border:0;background:linear-gradient(#ffe9a8,#f3c94a);color:#3a2408;font-weight:700;box-shadow:0 2px 0 #c79a1e}
+.dex i{font-style:normal;font-size:12px;opacity:.8}
+@media (max-width:480px){.stg{grid-template-columns:1fr 1fr}}
+
 @media (max-width:600px){
   .hud .rd{font-size:16px}
   .who{font-size:12px}.who .nm{max-width:6.5em}
@@ -420,7 +453,7 @@ table.pay{width:100%;border-collapse:collapse;font-size:15px}
    避免 Realtime Database 把空陣列、null 和數字鍵改掉。密碼完全交給 Firebase Authentication 處理，資料庫裡不存密碼。 */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
-import { getDatabase, ref, set, get, remove, onValue, runTransaction, onDisconnect, serverTimestamp, push } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js';
+import { getDatabase, ref, set, get, remove, update, onValue, runTransaction, onDisconnect, serverTimestamp, push } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js';
 
 const CONFIG = {
   apiKey: 'AIzaSyBoJTcGF9349-TW6-ASLXxRhcHZlUrPDAU',
@@ -473,18 +506,17 @@ const note = (err, msg) => (err ? `<p class="gerr" role="alert">${esc(err)}</p>`
 const tabs = on => `<div class="tabs" role="tablist"><button type="button" role="tab" class="tab${on === 'login' ? ' on' : ''}" aria-selected="${on === 'login'}" data-go="login">登入</button><button type="button" role="tab" class="tab${on === 'register' ? ' on' : ''}" aria-selected="${on === 'register'}" data-go="register">註冊新帳號</button></div>`;
 const V = {
   login: (err, msg) => showGate(`<form class="panel gp" data-f="login" novalidate>${tabs('login')}
-    ${field('id', '帳號或 Email', 'autocomplete="username" autocapitalize="none" spellcheck="false" required')}
+    ${field('id', '帳號或 Email', 'autocomplete="username" autocapitalize="none" spellcheck="false" required', '<b>註冊時有填 Email 的人，這裡只能輸入 Email</b>，輸入帳號會登入失敗')}
     ${field('pw', '密碼', 'type="password" autocomplete="current-password" required')}
     ${note(err, msg)}<button class="btn red" type="submit">登入</button>
-    <div class="glinks"><button type="button" class="lnk" data-go="forgot">忘記密碼</button><button type="button" class="lnk" data-go="local">先不登入，單機練習</button></div></form>`),
+    <div class="glinks"><button type="button" class="lnk" data-go="forgot">忘記密碼</button></div></form><div class="gicons">${iconBtn('local', '先不登入，單機練習')}</div>`),
   register: err => showGate(`<form class="panel gp" data-f="register" novalidate>${tabs('register')}
     ${field('user', '帳號', 'autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="16" required', '英文小寫、數字或底線，3–16 個字，登入時用')}
     ${field('pw', '密碼', 'type="password" autocomplete="new-password" required', '至少 6 個字')}
     ${field('pw2', '再輸入一次密碼', 'type="password" autocomplete="new-password" required')}
-    ${field('nick', '暱稱（選填）', 'maxlength="12" autocomplete="nickname"', '牌桌上顯示的名字；不填就用帳號')}
+    ${field('nick', '暱稱', 'maxlength="12" autocomplete="nickname" required', '牌桌上顯示的名字，最多 12 個字。之後只能在大廳改一次，請想好再填')}
     ${field('email', 'Email（選填）', 'type="email" autocomplete="email" autocapitalize="none"', '忘記密碼時用來重設；填了的話，之後請用這個 Email 登入')}
-    ${note(err)}<button class="btn red" type="submit">註冊並登入</button>
-    <div class="glinks"><button type="button" class="lnk" data-go="local">先不登入，單機練習</button></div></form>`),
+    ${note(err)}<button class="btn red" type="submit">註冊並登入</button></form><div class="gicons">${iconBtn('local', '先不登入，單機練習')}</div>`),
   forgot: (err, msg) => showGate(`<form class="panel gp" data-f="forgot" novalidate><h3>忘記密碼</h3>
     ${field('email', '註冊時填的 Email', 'type="email" autocomplete="email" autocapitalize="none" required')}
     <p class="small">我們會寄一封重設密碼的信到這個 Email。註冊時沒有填 Email 的帳號沒辦法自己重設，請找架設這個網站的人幫忙。</p>
@@ -492,16 +524,131 @@ const V = {
     <div class="glinks"><button type="button" class="lnk" data-go="login">回到登入</button></div></form>`),
   rooms: (err, msg) => {
     const rec = recentRooms();
-    showGate(`<div class="panel gp"><p class="ghi">嗨，<b>${esc(ME.nick || ME.user || '')}</b>${ME.user ? `<small>（帳號 ${esc(ME.user)}）</small>` : ''}</p>
+    showGate(`<div class="gicons">${iconBtn('ranking', '排行榜')}${iconBtn('profile', '個人資料')}${iconBtn('local', '單機練習')}${iconBtn('logout', '登出')}</div>
+      <div class="panel gp"><p class="ghi">嗨，<b>${esc(ME.nick || ME.user || '')}</b>${ME.user ? `<small>（帳號 ${esc(ME.user)}）</small>` : ''}</p>
       <button type="button" class="btn red" data-go="create">建立新房間</button>
       <form class="joinrow" data-f="join" novalidate>${field('code', '或輸入房號加入', 'inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" placeholder="6 位數字"')}<button class="btn" type="submit">加入</button></form>
       ${rec.length ? `<div class="recent"><span>最近的房間</span>${rec.map(r => `<button type="button" class="chip" data-room="${r}">${r}</button>`).join('')}</div>` : ''}
-      ${note(err, msg)}
-      <div class="glinks"><button type="button" class="lnk" data-go="local">單機練習</button><button type="button" class="lnk" data-go="logout">登出</button></div></div>`);
+      ${note(err, msg)}</div>`);
   },
 };
 
 let auth, db, ME = { uid: null, user: '', nick: '' }, ROOM = null, wantRoom = null, busy = false;
+
+/* ---------- 圖示 ---------- */
+const svg = b => `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${b}</svg>`;
+const ICON = {
+  rank: svg('<path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M9.5 17h5v3h-5z"/>'),
+  me: svg('<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'),
+  local: svg('<rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V4M10 4h4"/><circle cx="9.5" cy="13" r="1.2" fill="#fff"/><circle cx="14.5" cy="13" r="1.2" fill="#fff"/><path d="M9.5 16.5h5M3 12v3M21 12v3"/>'),
+  out: svg('<path d="M14 4H6v16h8"/><path d="M11 12h10M17 8l4 4-4 4"/>'),
+};
+const iconBtn = (go, label) => `<button type="button" class="ib" data-go="${go}" aria-label="${label}" title="${label}">${ICON[go === 'logout' ? 'out' : go === 'local' ? 'local' : go === 'ranking' ? 'rank' : 'me']}</button>`;
+
+/* ---------- 個人紀錄、排行榜、牌型圖鑑 ---------- */
+// 圖鑑收集的牌型（與遊戲裡會跳特效的牌型相同，加上兩個花牌特殊胡）
+const COLLECT = ['碰碰胡', '清一色', '混一色', '字一色', '大三元', '小三元', '大四喜', '小四喜', '五暗刻', '四暗刻', '三暗刻', '平胡', '全求人',
+  '槓上開花', '海底撈月', '河底撈魚', '搶槓', '天胡', '地胡', '人胡', '八仙過海', '七搶一'];
+const MIN_HANDS = 10;
+const parseStat = v => { try { const d = v && typeof v.j === 'string' ? JSON.parse(v.j) : null; return d && typeof d === 'object' ? d : null; } catch (e) { return null; } };
+const blankStat = () => ({ n: 0, w: 0, d: 0, best: null, pats: {}, keys: [] });
+const pct = x => (x * 100).toFixed(1) + '%';
+const ymd = t => { const d = new Date(t); return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`; };
+const bestText = b => b ? `${b.t} 台・${esc((b.p || []).join('、') || '—')}・${ymd(b.at)}` : '還沒有胡過牌';
+// 每打完一局，由玩家自己寫入自己的紀錄（同一局只算一次）
+window.mjStats = {
+  async record(e) {
+    if (!ME.uid || !e || typeof e.key !== 'string') return;
+    try {
+      await runTransaction(ref(db, 'stats/' + ME.uid), cur => {
+        const d = Object.assign(blankStat(), parseStat(cur) || {});
+        d.keys = Array.isArray(d.keys) ? d.keys : []; d.pats = d.pats && typeof d.pats === 'object' ? d.pats : {};
+        if (d.keys.includes(e.key)) return;               // 已經記過
+        d.keys = d.keys.concat(e.key).slice(-30);
+        if (e.rank) {                                      // 四位都是真人才算排行
+          d.n++; if (e.won) d.w++; if (e.dealin) d.d++;
+          if (e.won && (!d.best || e.tai > d.best.t)) d.best = { t: e.tai, p: (e.items || []).slice(0, 8), at: Date.now() };
+          if (e.won) for (const p of e.pats || []) if (COLLECT.includes(p)) d.pats[p] = (d.pats[p] || 0) + 1;   // 圖鑑也只算全真人局
+        }
+        return { j: JSON.stringify(d) };
+      });
+    } catch (x) { /* 沒存成功就算了，不影響牌局 */ }
+  },
+};
+let sheet = null;
+function showSheet(html) {
+  if (!sheet) {
+    sheet = document.createElement('div'); sheet.id = 'sheet'; sheet.className = 'ov';
+    sheet.addEventListener('click', e => { if (e.target === sheet || e.target.closest('[data-close]')) closeSheet(); });
+    document.body.appendChild(sheet);
+  }
+  sheet.innerHTML = `<div class="card sheetc" role="dialog">${html}</div>`;
+}
+function closeSheet() { if (sheet) { sheet.remove(); sheet = null; } }
+const sheetHead = t => `<div class="mh"><h3>${t}</h3><button type="button" class="xb" data-close aria-label="關閉">×</button></div>`;
+async function readAll() {
+  const [st, nm] = await Promise.all([get(ref(db, 'stats')), get(ref(db, 'names'))]);
+  const names = nm.val() || {};
+  return Object.entries(st.val() || {}).map(([uid, v]) => ({ uid, name: typeof names[uid] === 'string' ? names[uid] : '（未命名）', ...Object.assign(blankStat(), parseStat(v) || {}) }));
+}
+async function openRanking(tab = 'hu') {
+  showSheet(sheetHead('排行榜') + '<p class="small">讀取中…</p>');
+  let rows;
+  try { rows = await readAll(); } catch (e) { showSheet(sheetHead('排行榜') + '<p class="small">暫時讀不到排行榜，請確認網路後再試。</p>'); return; }
+  const tabsH = `<div class="tabs t3" role="tablist">${[['hu', '胡牌率'], ['def', '防禦率'], ['best', '最大一把']].map(([k, n]) => `<button type="button" role="tab" class="tab${k === tab ? ' on' : ''}" aria-selected="${k === tab}" data-rank="${k}">${n}</button>`).join('')}</div>`;
+  let list, note;
+  if (tab === 'best') {
+    list = rows.filter(r => r.best).sort((a, b) => b.best.t - a.best.t || a.best.at - b.best.at).map(r => ({ r, v: `${r.best.t} 台`, sub: `${esc((r.best.p || []).join('、'))}・${ymd(r.best.at)}` }));
+    note = '每位玩家單把最高台數。只計算四位都是真人的牌局。';
+  } else {
+    const q = rows.filter(r => r.n >= MIN_HANDS);
+    if (tab === 'hu') { list = q.map(r => ({ r, x: r.w / r.n })).sort((a, b) => b.x - a.x || b.r.n - a.r.n).map(o => ({ r: o.r, v: pct(o.x), sub: `${o.r.n} 局胡 ${o.r.w} 局` })); note = `胡牌局數 ÷ 參加局數。打滿 ${MIN_HANDS} 局才上榜，只計算四位都是真人的牌局。`; }
+    else { list = q.map(r => ({ r, x: r.d / r.n })).sort((a, b) => a.x - b.x || b.r.n - a.r.n).map(o => ({ r: o.r, v: pct(o.x), sub: `${o.r.n} 局放槍 ${o.r.d} 局` })); note = `放槍局數 ÷ 參加局數，越低越好。打滿 ${MIN_HANDS} 局才上榜，只計算四位都是真人的牌局。`; }
+  }
+  const mine = list.findIndex(x => x.r.uid === ME.uid), meRow = rows.find(r => r.uid === ME.uid);
+  const myLine = mine >= 0 ? `你是第 <b>${mine + 1}</b> 名` : tab === 'best' ? '你還沒有在真人牌局胡過牌' : `你打了 ${meRow ? meRow.n : 0} 局，再 ${MIN_HANDS - (meRow ? meRow.n : 0)} 局就會上榜`;
+  const body = list.length ? `<ol class="rk">${list.slice(0, 50).map((x, i) => `<li class="${x.r.uid === ME.uid ? 'me' : ''}"><span class="no">${i + 1}</span><span class="nm">${esc(x.r.name)}<small>${x.sub}</small></span><b>${x.v}</b></li>`).join('')}</ol>` : '<p class="small">還沒有人上榜，快找三位朋友打滿幾局吧！</p>';
+  showSheet(sheetHead('排行榜') + tabsH + `<p class="small">${note}</p><p class="myrk">${myLine}</p>` + body);
+}
+async function openProfile(editing) {
+  showSheet(sheetHead('個人資料') + '<p class="small">讀取中…</p>');
+  let d = blankStat(), renamed = false;
+  try {
+    const [st, rn, nm] = await Promise.all([get(ref(db, 'stats/' + ME.uid)), get(ref(db, 'renamed/' + ME.uid)), get(ref(db, 'names/' + ME.uid))]);
+    d = Object.assign(blankStat(), parseStat(st.val()) || {}); renamed = rn.val() === true; if (typeof nm.val() === 'string') ME.nick = nm.val();
+  } catch (e) { /* 顯示空白紀錄 */ }
+  const nameRow = editing && !renamed
+    ? `<form class="renm" data-rename><label class="fld"><span>新的暱稱</span><input name="nick" class="nick" maxlength="12" value="${esc(ME.nick)}" required></label>
+       <p class="small"><b>改名只有一次機會</b>，改了之後就不能再改，請想好再按確定。</p><p class="gerr" hidden></p>
+       <div class="foot"><button type="button" class="btn ghost sm" data-prof="view">取消</button><button type="submit" class="btn red sm">確定改名</button></div></form>`
+    : `<div class="pname"><span>暱稱</span><b>${esc(ME.nick)}</b>${renamed ? '<small>（已經改過名了）</small>' : '<button type="button" class="btn ghost sm" data-prof="edit">改名（只能改一次）</button>'}</div>`;
+  const st = (k, v, s) => `<div class="stc"><span>${k}</span><b>${v}</b>${s ? `<small>${s}</small>` : ''}</div>`;
+  const enough = d.n >= MIN_HANDS, more = `再 ${MIN_HANDS - d.n} 局上榜`;
+  const stats = `<div class="stg">${st('參加局數', d.n, '四位都是真人的牌局')}${st('胡牌率', d.n ? pct(d.w / d.n) : '—', enough ? `胡 ${d.w} 局` : more)}${st('防禦率', d.n ? pct(d.d / d.n) : '—', enough ? `放槍 ${d.d} 局，越低越好` : more)}</div>
+    <div class="stc wide"><span>最大一把</span><b>${d.best ? d.best.t + ' 台' : '—'}</b><small>${d.best ? `${esc((d.best.p || []).join('、') || '—')}・${ymd(d.best.at)}` : '還沒有在真人牌局胡過牌'}</small></div>`;
+  const got = COLLECT.filter(p => d.pats[p]).length;
+  const dex = `<h3 class="dexh">牌型圖鑑 <small>${got} / ${COLLECT.length}</small></h3><p class="small">胡過的牌型會亮起來（只計算四位都是真人的牌局）。</p>
+    <div class="dex">${COLLECT.map(p => d.pats[p] ? `<span class="got">${p}<i>×${d.pats[p]}</i></span>` : `<span>${p}</span>`).join('')}</div>`;
+  showSheet(sheetHead('個人資料') + nameRow + (ME.user ? `<p class="small">帳號：${esc(ME.user)}</p>` : '') + stats + dex);
+}
+async function doRename(f) {
+  const n = f.nick.value.replace(/\s+/g, ' ').trim().slice(0, 12), e = f.querySelector('.gerr');
+  if (!n) { e.hidden = false; e.textContent = '請輸入新的暱稱。'; return; }
+  if (n === ME.nick) return openProfile(false);
+  try {
+    await update(ref(db), { ['names/' + ME.uid]: n, ['renamed/' + ME.uid]: true });
+    ME.nick = n; try { localStorage.setItem('mj-nick', n); } catch (x) { /* ignore */ }
+    window.dispatchEvent(new Event('mj-names'));
+    openProfile(false);
+  } catch (x) { e.hidden = false; e.textContent = '改名失敗：你可能已經改過一次了，或網路不穩。'; }
+}
+window.mjPanels = { profile: () => openProfile(false), ranking: () => openRanking('hu') };
+document.addEventListener('click', e => {
+  const t = e.target.closest('#sheet [data-rank], #sheet [data-prof]'); if (!t) return;
+  if (t.dataset.rank) openRanking(t.dataset.rank); else openProfile(t.dataset.prof === 'edit');
+});
+document.addEventListener('submit', e => { const f = e.target; if (f.matches && f.matches('#sheet [data-rename]')) { e.preventDefault(); doRename(f); } });
+
 const qRoom = new URLSearchParams(location.search).get('room');
 if (qRoom && ROOM_RE.test(qRoom)) wantRoom = qRoom;
 
@@ -546,56 +693,66 @@ const leave = msg => { try { if (msg) sessionStorage.setItem('mj-gate-msg', msg)
 window.mjToGate = leave;
 const gateMsg = () => { try { const m = sessionStorage.getItem('mj-gate-msg') || ''; sessionStorage.removeItem('mj-gate-msg'); return m; } catch (e) { return ''; } };
 
+function say(f, err, msg) {
+  if (!f || !f.isConnected) return V.login(err, msg);
+  f.querySelectorAll('.gerr, .gmsg').forEach(n => n.remove());
+  const p = document.createElement('p'); p.className = err ? 'gerr' : 'gmsg'; p.setAttribute('role', err ? 'alert' : 'status'); p.textContent = err || msg;
+  const b = [...f.children].find(x => x.matches && x.matches('[type=submit]'));
+  f.insertBefore(p, b || null);
+}
 async function doLogin(f) {
   const id = f.id.value.trim().toLowerCase(), pw = f.pw.value;
-  if (!id || !pw) return V.login('請輸入帳號和密碼。');
+  if (!id || !pw) return say(f, '請輸入帳號和密碼。');
   const email = id.includes('@') ? id : id + SYN;
   try { const c = await signInWithEmailAndPassword(auth, email, pw); await afterLogin(c.user); }
-  catch (e) { V.login(authMsg(e) + (id.includes('@') ? '' : '（註冊時有填 Email 的話，也可以改用 Email 登入。）')); }
+  catch (e) { say(f, authMsg(e) + (id.includes('@') ? '' : '（註冊時有填 Email 的話，也可以改用 Email 登入。）')); }
 }
 async function doRegister(f) {
   const user = f.user.value.trim().toLowerCase(), pw = f.pw.value, pw2 = f.pw2.value;
   const nick = f.nick.value.replace(/\s+/g, ' ').trim().slice(0, 12), email = f.email.value.trim();
-  if (!USER_RE.test(user)) return V.register('帳號只能用英文小寫、數字或底線，3–16 個字。');
-  if (pw.length < 6) return V.register('密碼至少要 6 個字。');
-  if (pw !== pw2) return V.register('兩次輸入的密碼不一樣。');
-  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return V.register('Email 格式不對。');
-  try { if ((await get(ref(db, 'usernames/' + user))).exists()) return V.register('這個帳號已經有人用了，請換一個。'); } catch (e) { /* 交給下面的交易判斷 */ }
+  if (!USER_RE.test(user)) return say(f, '帳號只能用英文小寫、數字或底線，3–16 個字。');
+  if (pw.length < 6) return say(f, '密碼至少要 6 個字。');
+  if (pw !== pw2) return say(f, '兩次輸入的密碼不一樣。');
+  if (!nick) return say(f, '請填暱稱，這是牌桌上大家看到的名字。');
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return say(f, 'Email 格式不對。');
+  try { if ((await get(ref(db, 'usernames/' + user))).exists()) return say(f, '這個帳號已經有人用了，請換一個。'); } catch (e) { /* 交給下面的交易判斷 */ }
   let cred;
   try { cred = await createUserWithEmailAndPassword(auth, email || user + SYN, pw); }
-  catch (e) { return V.register(/email-already-in-use/.test(String(e && e.code)) && !email ? '這個帳號已經有人用了，請換一個。' : authMsg(e)); }
+  catch (e) { return say(f, /email-already-in-use/.test(String(e && e.code)) && !email ? '這個帳號已經有人用了，請換一個。' : authMsg(e)); }
   const u = cred.user;
   try {
     const r = await runTransaction(ref(db, 'usernames/' + user), cur => (cur && cur !== u.uid) ? undefined : u.uid);
-    if (!r.committed) { try { await u.delete(); } catch (e) { /* ignore */ } return V.register('這個帳號已經有人用了，請換一個。'); }
+    if (!r.committed) { try { await u.delete(); } catch (e) { /* ignore */ } return say(f, '這個帳號已經有人用了，請換一個。'); }
     await set(ref(db, `data/users/${u.uid}/profile`), { u: user, e: !!email });
-    await set(ref(db, `names/${u.uid}`), nick || user);
-    try { localStorage.setItem('mj-nick', nick || user); } catch (e) { /* ignore */ }
-  } catch (e) { return V.register('帳號建立了，但資料寫入失敗（' + String((e && e.code) || e) + '），請重新整理後登入。'); }
+    await set(ref(db, `names/${u.uid}`), nick);
+    try { localStorage.setItem('mj-nick', nick); } catch (e) { /* ignore */ }
+  } catch (e) { return say(f, '帳號建立了，但資料寫入失敗（' + String((e && e.code) || e) + '），請重新整理後登入。'); }
   await afterLogin(u);
 }
 async function doForgot(f) {
   const email = f.email.value.trim();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return V.forgot('請輸入註冊時填的 Email。');
-  try { await sendPasswordResetEmail(auth, email); V.forgot('', '如果這個 Email 有註冊，重設密碼的信已經寄出了，請到信箱收信（也看一下垃圾郵件）。'); }
-  catch (e) { V.forgot(authMsg(e)); }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return say(f, '請輸入註冊時填的 Email。');
+  try { await sendPasswordResetEmail(auth, email); say(f, '', '如果這個 Email 有註冊，重設密碼的信已經寄出了，請到信箱收信（也看一下垃圾郵件）。'); }
+  catch (e) { say(f, authMsg(e)); }
 }
 function wireGate() {
   document.addEventListener('submit', async e => {
     const f = e.target; if (!gate || !gate.contains(f)) return;
     e.preventDefault(); if (busy) return; busy = true;
-    const b = f.querySelector('[type=submit]'); if (b) { b.disabled = true; b.textContent = '處理中…'; }
+    const b = f.querySelector('[type=submit]'), label = b ? b.textContent : ''; if (b) { b.disabled = true; b.textContent = '處理中…'; }
     try {
       const k = f.dataset.f;
       if (k === 'login') await doLogin(f); else if (k === 'register') await doRegister(f); else if (k === 'forgot') await doForgot(f);
       else if (k === 'join') await joinRoom(f.code.value.trim());
-    } finally { busy = false; }
+    } finally { busy = false; if (b && b.isConnected) { b.disabled = false; b.textContent = label; } }
   });
   document.addEventListener('click', async e => {
     const b = e.target.closest('#gate [data-go], #gate [data-room]'); if (!b || busy) return;
     if (b.dataset.room) { busy = true; try { await joinRoom(b.dataset.room); } finally { busy = false; } return; }
     const g = b.dataset.go;
     if (g === 'login' || g === 'register' || g === 'forgot') V[g]();
+    else if (g === 'ranking') openRanking('hu');
+    else if (g === 'profile') openProfile(false);
     else if (g === 'create') { busy = true; b.disabled = true; b.textContent = '建立中…'; try { await createRoom(); } finally { busy = false; } }
     else if (g === 'logout') { try { await signOut(auth); } catch (x) { /* ignore */ } leave(); }
     else if (g === 'local') { hideGate(); window.mjLocalOnly = true; finish(); } // 直接開始單機練習
@@ -635,7 +792,8 @@ async function startAdapter(fresh) {
   }, () => {});
 
   /* ---- 暱稱 ---- */
-  let names = {}, myName = ME.nick || '';
+  let names = {}, myName = ME.nick || '', renamed = false;
+  onValue(ref(db, 'renamed/' + uid), s => { renamed = s.val() === true; window.dispatchEvent(new Event('mj-names')); }, () => {});
   onValue(ref(db, 'names'), s => { names = s.val() || {}; window.dispatchEvent(new Event('mj-names')); }, () => {});
   const user = {
     id: async () => uid,
@@ -643,12 +801,14 @@ async function startAdapter(fresh) {
     me: async () => ({ id: uid, name: names[uid] || myName }),
     profiles: async ids => Object.fromEntries([...new Set([].concat(ids))].map(id => [id, { id, name: typeof names[id] === 'string' ? names[id] : '', isMe: id === uid }])),
     getName: () => (typeof names[uid] === 'string' && names[uid]) || myName,
+    canRename: () => !renamed,
     async setName(n) {
       n = String(n).replace(/\s+/g, ' ').trim().slice(0, 12);
       if (!n) return;
-      myName = n; names = { ...names, [uid]: n };
+      if (renamed) throw new Error('already renamed');
+      await update(ref(db), { ['names/' + uid]: n, ['renamed/' + uid]: true });
+      myName = n; names = { ...names, [uid]: n }; renamed = true;
       try { localStorage.setItem('mj-nick', n); } catch (e) { /* in-memory only */ }
-      await set(ref(db, 'names/' + uid), n);
     },
   };
 
@@ -710,6 +870,7 @@ async function startAdapter(fresh) {
   };
   window.mjAccount = {
     room: ROOM, user: ME.user, fresh: !!fresh,
+    canRename: () => user.canRename(),
     link: location.origin + location.pathname + '?room=' + ROOM,
     leaveRoom: msg => leave(msg),
     async logout() { try { await signOut(auth); } catch (e) { /* ignore */ } leave(); },
@@ -1405,6 +1566,9 @@ function faceInner(k) {
 }
 return k => `<svg viewBox="0 0 60 80" aria-hidden="true">${faceInner(k)}</svg>`;
 })();
+const isvg = b => `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${b}</svg>`;
+const ICON_RANK = isvg('<path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M9.5 17h5v3h-5z"/>');
+const ICON_ME = isvg('<circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/>');
 const ICON_GEAR = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M19.11 9.32 L22.78 9.81 L22.78 14.19 L19.11 14.68 L18.92 15.14 L21.17 18.08 L18.08 21.17 L15.14 18.92 L14.68 19.11 L14.19 22.78 L9.81 22.78 L9.32 19.11 L8.86 18.92 L5.92 21.17 L2.83 18.08 L5.08 15.14 L4.89 14.68 L1.22 14.19 L1.22 9.81 L4.89 9.32 L5.08 8.86 L2.83 5.92 L5.92 2.83 L8.86 5.08 L9.32 4.89 L9.81 1.22 L14.19 1.22 L14.68 4.89 L15.14 5.08 L18.08 2.83 L21.17 5.92 L18.92 8.86 Z M12 8.6 A3.4 3.4 0 1 0 12 15.4 A3.4 3.4 0 1 0 12 8.6 Z" fill="#fff" fill-rule="evenodd" stroke="rgba(0,0,0,.35)" stroke-width=".6"/></svg>';
 const ICON_SMILE = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="#fff" stroke="rgba(0,0,0,.35)" stroke-width=".6"/><circle cx="8.6" cy="9.8" r="1.5" fill="#2a1406"/><circle cx="15.4" cy="9.8" r="1.5" fill="#2a1406"/><path d="M7.2 13.6 Q12 18.6 16.8 13.6" fill="none" stroke="#2a1406" stroke-width="1.8" stroke-linecap="round"/></svg>';
 const FACES = [];
@@ -1847,14 +2011,16 @@ const myNick = () => (App.user && typeof App.user.getName === 'function' ? App.u
 const needNick = () => App.feat.nickname && !myNick();
 function nickHTML() {
   const cur = myNick();
-  return `<div class="card menu"><h3>你的暱稱</h3><p class="small">牌桌上其他人會看到這個名字，最多 12 個字。</p>
+  const once = window.mjAccount && cur ? '<p class="small"><b>改名只有一次機會</b>，改了之後就不能再改，請想好再按確定。</p>' : '';
+  return `<div class="card menu"><h3>${cur ? '修改暱稱' : '你的暱稱'}</h3><p class="small">牌桌上其他人會看到這個名字，最多 12 個字。</p>${once}
     <input id="nick-in" class="nick" maxlength="12" value="${esc(cur)}" placeholder="例如：阿明" autocomplete="nickname">
     <div class="foot">${cur ? '<button class="btn ghost" data-a="close">取消</button>' : ''}<button class="btn red" data-a="nick-save">確定</button></div></div>`;
 }
 async function saveNick() {
   const el = document.getElementById('nick-in'), v = el ? el.value.trim() : '';
   if (!v) { toast('請先輸入暱稱'); return; }
-  try { await App.user.setName(v); } catch (e) { toast('暱稱沒有存成功，請再試一次'); return; }
+  if (v === myNick()) { App.ov = null; render(); return; }
+  try { await App.user.setName(v); } catch (e) { toast(window.mjAccount && !window.mjAccount.canRename() ? '你已經改過一次名字了' : '暱稱沒有存成功，請再試一次'); App.ov = null; render(); return; }
   App.ov = null; App.names[App.uid] = myNick(); render();
 }
 const dotHTML = uid => (!App.online || App.local || !uid) ? '' : App.online.has(uid) ? '<span class="dot on" title="在線上"></span>'
@@ -1894,7 +2060,7 @@ function render() {
     const P = gameParts(V);
     for (const [id, html, cls] of P) setPart(id, html, cls);
     if (V.game.phase === 'play') App.playSeen = V.game.handNo;
-    checkFx(V.game); checkStk(V);
+    checkFx(V.game); checkStk(V); recordStats(V);
   } else {
     const html = V.screen === 'game' ? overHTML(V) : V.screen === 'lobby' ? lobbyHTML(V) : startHTML();
     if (App.shell !== html) { app.innerHTML = html; App.shell = html; }
@@ -1948,7 +2114,7 @@ function lobbyHTML(V) {
   const roomBox = acc ? `<div class="roombox"><span>房號</span><b>${esc(acc.room)}</b><button class="btn sm" data-a="invite">邀請朋友</button></div>` : '';
   return `<main class="lobby"><h1>台灣十六張麻將</h1>${roomBox}
     <p class="note">${mySeat >= 0 ? '你已入座。' : canSit ? '點空位入座。' : '你目前只能觀看。'}${App.feat.site ? '把網址傳給牌友，他們打開後就能入座。' : '把這頁分享給牌友，他們開啟後就能入座。'}</p>
-    ${App.feat.nickname ? `<p class="note">你的暱稱：<b>${esc(myNick() || '（未設定）')}</b> <button class="btn ghost sm" data-a="nick">修改</button></p>` : ''}
+    ${window.mjPanels ? `<div class="licons"><button class="ib" data-a="profile" aria-label="個人資料" title="個人資料">${ICON_ME}</button><button class="ib" data-a="ranking" aria-label="排行榜" title="排行榜">${ICON_RANK}</button></div>` : App.feat.nickname ? `<p class="note">你的暱稱：<b>${esc(myNick() || '（未設定）')}</b> <button class="btn ghost sm" data-a="nick">修改</button></p>` : ''}
     ${App.err ? `<div class="err">${esc(App.err)}</div>` : ''}
     ${hostAway(V) ? awayBanner() : ''}
     <div class="ltable">${seatsH}<div class="mid">${filled < 4 ? `等待入座<br>${filled} / 4` : '人數到齊'}</div></div>
@@ -2207,6 +2373,21 @@ function groupsHTML(R) {
   if (R.flowers.length) out.push(`<span class="gb fl">${R.flowers.map(k => tile(k)).join('')}</span>`);
   return out.join('');
 }
+// 每局結束記錄自己的成績（只記自己有參與、親眼看到結束的那一局）
+const COLLECT = PATS.concat(['八仙過海', '七搶一']);
+function recordStats(V) {
+  const g = V.game, R = g && g.result, me = V.mySeat;
+  if (!window.mjStats || !window.mjAccount || App.local || !R || g.phase !== 'end' || me < 0 || App.playSeen !== g.handNo) return;
+  const tid = Host.on ? Host.tid : App.S && App.S.tid, key = `${window.mjAccount.room}:${tid}:${g.handNo}`;
+  if (App.statKey === key) return;
+  App.statKey = key;
+  const win = R.kind === 'win', won = win && R.w === me, allDt = win && R.pays.every(x => x.dt);
+  const names = win ? R.items.map(([n]) => n) : [];
+  const items = won ? names.filter(n => COLLECT.includes(n)).concat(names.filter(n => !COLLECT.includes(n))) : [];
+  if (won && allDt) { items.push('莊家'); if (R.streak) items.push(`連${CNUM(R.streak)}拉${CNUM(R.streak)}`); }
+  window.mjStats.record({ key, rank: g.seats.every(x => x && !x.bot), won, dealin: win && R.from === me,
+    tai: won ? R.tai + (allDt ? R.dealerTai : 0) : 0, items, pats: won ? names.filter(n => COLLECT.includes(n)) : [] });
+}
 const winWord = R => R.kind !== 'win' ? '流局' : R.special === 'bax' ? '八仙過海' : R.special === 'qqy' ? '七搶一' : R.self ? '自摸' : '胡';
 // 胡牌流程：① 胡／自摸 → ② 牌型特效（一個接一個）→ ③ 結算表。中途加入或重新整理的人直接看結算表。
 function flowHTML(V) {
@@ -2300,27 +2481,11 @@ function overHTML(V) {
 function menuHTML(V) {
   const g = V && V.game, me = V ? V.mySeat : -1, items = [];
   items.push('<button class="btn ghost" data-a="rules">規則與台數</button>');
-  if (App.feat.nickname && App.net && !App.local) items.push('<button class="btn ghost" data-a="nick">修改暱稱</button>');
-  if (window.mjAccount && !App.local) items.push('<button class="btn ghost" data-a="invite">邀請朋友（房號 ' + esc(window.mjAccount.room) + '）</button>', '<button class="btn ghost" data-a="leaveroom">換房間</button>', '<button class="btn ghost" data-a="logout">登出</button>');
+  if (window.mjAccount && !App.local) items.push(`<button class="btn ghost" data-a="invite">邀請朋友（房號 ${esc(window.mjAccount.room)}）</button>`);
   if (g && me >= 0 && g.phase === 'play') items.push(`<button class="btn ghost" data-a="auto" data-on="${g.auto[me] ? 0 : 1}">${g.auto[me] ? '取消托管' : '托管（讓電腦代打）'}</button>`);
   if (App.local) items.push('<button class="btn ghost" data-a="quitlocal">離開單機練習</button>');
-  else if (V && V.isHost) { if (g) items.push('<button class="btn ghost" data-a="tolobby">結束牌局，回大廳</button>'); items.push('<button class="btn ghost" data-a="dissolve">解散牌桌</button>'); }
-  else if (App.net && App.S && App.canWrite !== false) items.push('<button class="btn ghost" data-a="takeover">接手主持（房主離線時）</button>');
-  items.push('<button class="btn" data-a="close">關閉</button>');
-  let diag = '';
-  if (App.net && !App.local) {
-    const rc = App.room && typeof App.room.connected === 'function' ? App.room.connected() : false;
-    let lines;
-    if (V && V.isHost) lines = ['你是房主，你的動作不需要等待。'];
-    else {
-      const r = App.rtts, avg = r.length ? r.reduce((x, y) => x + y, 0) / r.length : null;
-      lines = [r.length ? `你的動作：最近一次 ${secs(r[r.length - 1])} 秒，最近 ${r.length} 次平均 ${secs(avg)} 秒（送出到房主確認）` : '你的動作：還沒有量測資料，出一張牌後再看。',
-        App.lagEst != null ? `房主更新傳到你：約 ${secs(App.lagEst)} 秒（依兩台裝置的時鐘推算）` : '',
-        `最近一次收到更新：${Math.max(0, Math.round((Date.now() - App.lastStateAt) / 1000))} 秒前`].filter(Boolean);
-    }
-    diag = `<div class="small"><b>連線狀態</b>（${App.feat.site ? (rc ? '連線正常' : '連線中斷，恢復後會自動同步') : '即時通道' + (rc ? '已連線' : '未連線，改用定時讀取')}）<br>${lines.map(esc).join('<br>')}</div>`;
-  }
-  return `<div class="card menu"><h3>選單</h3>${items.join('')}${diag}</div>`;
+  else if (V && V.isHost) items.push('<button class="btn ghost" data-a="dissolve">解散牌桌</button>');
+  return `<div class="card menu"><div class="mh"><h3>選單</h3><button class="xb" data-a="close" aria-label="關閉選單">×</button></div>${items.join('')}</div>`;
 }
 function rulesHTML() {
   const TAI = [['莊家', '1'], ['連莊（連 N 拉 N）', '每連 2'], ['門清／自摸', '各 1'], ['門清自摸', '3'], ['圈風刻、門風刻', '各 1'], ['中、發、白刻', '各 1'],
@@ -2370,7 +2535,7 @@ function onClick(e) {
   const a = b.dataset.a, d = b.dataset, V = App.V;
   switch (a) {
     case 'create': if (needNick()) { App.ov = 'nick'; render(); break; } createTable(); break;
-    case 'nick': App.ov = 'nick'; render(); setTimeout(() => { const el = document.getElementById('nick-in'); if (el) el.focus(); }, 50); break;
+    case 'nick': if (window.mjAccount && (!window.mjAccount.canRename() || !App.V || App.V.screen !== 'lobby')) break; App.ov = 'nick'; render(); setTimeout(() => { const el = document.getElementById('nick-in'); if (el) el.focus(); }, 50); break;
     case 'nick-save': saveNick(); break;
     case 'local': startLocal(); break;
     case 'sit': if (needNick()) { App.ov = 'nick'; render(); break; } send({ t: 'sit', s: +d.s }); break;
@@ -2407,6 +2572,8 @@ function onClick(e) {
     case 'tingdecl': { const k = currentTiles()[App.sel]; if (k != null) send({ t: 'discard', k, ting: true }); break; }
     case 'stkopen': App.ov = 'stk'; render(); break;
     case 'invite': invite(); break;
+    case 'profile': if (window.mjPanels) window.mjPanels.profile(); break;
+    case 'ranking': if (window.mjPanels) window.mjPanels.ranking(); break;
     case 'leaveroom': App.ov = { ask: '離開這個房間、回到選房間畫面？如果牌局還在進行，你的位置會由電腦代打。', yes: 'leaveroom!' }; render(); break;
     case 'leaveroom!': if (window.mjAccount) window.mjAccount.leaveRoom(); break;
     case 'logout': App.ov = { ask: '登出帳號？如果牌局還在進行，你的位置會由電腦代打。', yes: 'logout!' }; render(); break;
